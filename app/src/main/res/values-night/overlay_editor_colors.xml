@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="overlay_editor_primary">#D8C3A5</color>
+    <color name="overlay_editor_on_primary">#302A24</color>
+    <color name="overlay_editor_primary_container">#514538</color>
+    <color name="overlay_editor_secondary">#C6AD8F</color>
+    <color name="overlay_editor_surface">#201D19</color>
+    <color name="overlay_editor_panel">#2B2722</color>
+    <color name="overlay_editor_canvas">#171512</color>
+    <color name="overlay_editor_divider">#514538</color>
+    <color name="overlay_editor_text">#F5F0E6</color>
+    <color name="overlay_editor_outline">#806B55</color>
+</resources>

@@ -2,6 +2,9 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:theme="@style/OverlayEditorTheme"
+    android:layoutDirection="locale"
+    android:background="@color/overlay_editor_surface"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -65,7 +68,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="8dp"
+            android:background="@drawable/overlay_editor_panel"
+            android:padding="12dp">
 
             <LinearLayout
                 android:id="@+id/toastFormatRow"
@@ -187,6 +192,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginTop="8dp"
+            android:background="@drawable/overlay_editor_panel"
+            android:padding="12dp"
             android:visibility="gone">
 
             <com.google.android.material.textfield.TextInputLayout
@@ -223,6 +230,70 @@
                     android:minLines="2"
                     android:text="@string/def_msg" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical"
+                android:background="@drawable/overlay_editor_panel"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Advanced protection"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/overlayProtectionEnabled"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Enable app protection" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/overlayProtectionSignature"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Verify signing certificate" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/overlayProtectionComponents"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Verify protected activities" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/overlayProtectionPin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Require PIN" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/overlayProtectionPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Require password" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/overlayProtectionFingerprint"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Device credential / fingerprint" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="PIN or password">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/overlayProtectionCredential"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/overlayPosAddBtn"
@@ -453,6 +524,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:background="@drawable/overlay_editor_panel"
+            android:padding="12dp"
             android:visibility="gone">
 
             <com.google.android.material.button.MaterialButton
@@ -474,8 +547,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:text="@string/background"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
+                    style="@style/OverlayEditorSectionLabel" />
 
                 <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/overlayBgSwitch"
@@ -525,15 +597,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="12dp"
-                    android:background="#22000000" />
+                    android:background="@color/overlay_editor_divider" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="@string/shape"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
+                    style="@style/OverlayEditorSectionLabel" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -588,15 +659,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="12dp"
-                    android:background="#22000000" />
+                    android:background="@color/overlay_editor_divider" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="@string/animated_border"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
+                    style="@style/OverlayEditorSectionLabel" />
 
                 <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/overlayAnimSwitch"
@@ -654,15 +724,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="12dp"
-                    android:background="#22000000" />
+                    android:background="@color/overlay_editor_divider" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="@string/title"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
+                    style="@style/OverlayEditorSectionLabel" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -770,6 +839,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginTop="8dp"
+                android:background="@drawable/overlay_editor_preview_bg"
                 android:padding="12dp">
 
                 <ImageView
@@ -802,6 +872,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginTop="8dp"
+            android:background="@drawable/overlay_editor_panel"
+            android:padding="12dp"
             android:visibility="gone">
 
             <TextView
@@ -815,7 +887,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="380dp"
                 android:layout_marginTop="4dp"
-                android:background="#20000000" />
+                android:background="@drawable/overlay_editor_canvas_bg"
+                android:clipToOutline="true" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -892,7 +965,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="8dp"
+            android:background="@drawable/overlay_editor_panel"
+            android:padding="12dp">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/overlayCodeToggle"
@@ -916,7 +991,10 @@
                     android:fontFamily="monospace"
                     android:textSize="12sp"
                     android:scrollbars="vertical"
-                    android:overScrollMode="always" />
+                    android:overScrollMode="always"
+                    android:background="@drawable/overlay_editor_code_bg"
+                    android:padding="12dp"
+                    android:textColor="@color/overlay_editor_text" />
 
                 <TextView
                     android:id="@+id/overlayCodeStatus"

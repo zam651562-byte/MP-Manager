@@ -121,6 +121,18 @@ public class OverlayInjectorUtil {
         public String dlgFont = "";
         public String dlgFontPath = "";
         public List<AdvWidget> widgets;
+        public ProtectionOptions protection;
+    }
+
+    public static class ProtectionOptions {
+        public boolean enabled;
+        public boolean verifySignature = true;
+        public boolean verifyComponents;
+        public boolean requirePin;
+        public boolean requirePassword;
+        public boolean requireFingerprint;
+        public String credential = "";
+        public String expectedSignatureSha256 = "";
     }
 
     public static AdvWidget copyWidget(AdvWidget w) {
@@ -206,6 +218,20 @@ public class OverlayInjectorUtil {
                                               ToastOptions toast, DialogOptions dialog,
                                               APKLogger logger) throws Exception {
         validateOptions(toast, dialog);
+        if (dialog != null && dialog.protection != null && dialog.protection.enabled
+                && dialog.protection.verifySignature
+                && (dialog.protection.expectedSignatureSha256 == null
+                || dialog.protection.expectedSignatureSha256.trim().isEmpty())) {
+            ApkSignatureInfo sig = ApkSignatureInfo.analyze(inputApk);
+            if (sig != null && sig.isVerified() && sig.getPrimaryCertificate() != null) {
+                try {
+                    dialog.protection.expectedSignatureSha256 =
+                            Base64.encodeToString(sig.getPrimaryCertificate().getEncoded(), Base64.NO_WRAP);
+                } catch (Exception ignored) {
+                    dialog.protection.expectedSignatureSha256 = "";
+                }
+            }
+        }
         debugInit(context);
         debug("input=" + inputApk.getAbsolutePath());
         debug("activities=" + activityClassNames);
@@ -1185,10 +1211,186 @@ public class OverlayInjectorUtil {
                 + ".end method\n";
     }
 
-    static String wrapperSmali(String classDescriptor, String flags, boolean callToast, boolean callDialog) {
+    static String protectionHelperSmali(String classDescriptor, ProtectionOptions opts,
+                                        String listenerType) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(".method private mpmanagerProtection()Z\n");
+        sb.append("    .locals 12\n");
+
+        if (opts.verifySignature && !isBlank(opts.expectedSignatureSha256)) {
+            sb.append("    invoke-virtual {p0}, Landroid/app/Activity;->getPackageManager()Landroid/content/pm/PackageManager;\n");
+            sb.append("    move-result-object v0\n");
+            sb.append("    invoke-virtual {p0}, Landroid/app/Activity;->getPackageName()Ljava/lang/String;\n");
+            sb.append("    move-result-object v1\n");
+            sb.append("    const v2, 0x40\n");
+            sb.append("    invoke-virtual {v0, v1, v2}, Landroid/content/pm/PackageManager;->getPackageInfo(Ljava/lang/String;I)Landroid/content/pm/PackageInfo;\n");
+            sb.append("    move-result-object v3\n");
+            sb.append("    iget-object v4, v3, Landroid/content/pm/PackageInfo;->signatures:[Landroid/content/pm/Signature;\n");
+            sb.append("    if-nez v4, :mp_sig_present\n");
+            sb.append("    invoke-virtual {p0}, Landroid/app/Activity;->finish()V\n");
+            sb.append("    const/4 v0, 0x0\n");
+            sb.append("    return v0\n");
+            sb.append("    :mp_sig_present\n");
+            sb.append("    array-length v5, v4\n");
+            sb.append("    if-nez v5, :mp_sig_count\n");
+            sb.append("    invoke-virtual {p0}, Landroid/app/Activity;->finish()V\n");
+            sb.append("    const/4 v0, 0x0\n");
+            sb.append("    return v0\n");
+            sb.append("    :mp_sig_count\n");
+            sb.append("    const/4 v5, 0x0\n");
+            sb.append("    aget-object v6, v4, v5\n");
+            sb.append("    invoke-virtual {v6}, Landroid/content/pm/Signature;->toByteArray()[B\n");
+            sb.append("    move-result-object v6\n");
+            sb.append("    const/4 v7, 0x0\n");
+            sb.append("    invoke-static {v6, v7}, Landroid/util/Base64;->encodeToString([BI)Ljava/lang/String;\n");
+            sb.append("    move-result-object v6\n");
+            sb.append("    const-string v8, \"").append(escapeSmali(opts.expectedSignatureSha256)).append("\"\n");
+            sb.append("    invoke-virtual {v6, v8}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z\n");
+            sb.append("    move-result v9\n");
+            sb.append("    if-nez v9, :mp_sig_ok\n");
+            sb.append("    invoke-virtual {p0}, Landroid/app/Activity;->finish()V\n");
+            sb.append("    const/4 v0, 0x0\n");
+            sb.append("    return v0\n");
+            sb.append("    :mp_sig_ok\n");
+        }
+
+        if (opts.verifyComponents) {
+            sb.append("    invoke-virtual {p0}, Landroid/app/Activity;->getComponentName()Landroid/content/ComponentName;\n");
+            sb.append("    move-result-object v0\n");
+            sb.append("    invoke-virtual {v0}, Landroid/content/ComponentName;->getClassName()Ljava/lang/String;\n");
+            sb.append("    move-result-object v0\n");
+            sb.append("    if-nez v0, :mp_component_ok\n");
+            sb.append("    invoke-virtual {p0}, Landroid/app/Activity;->finish()V\n");
+            sb.append("    const/4 v0, 0x0\n");
+            sb.append("    return v0\n");
+            sb.append("    :mp_component_ok\n");
+        }
+
+        if (opts.requireFingerprint) {
+            sb.append("    const-string v0, \"keyguard\"\n");
+            sb.append("    invoke-virtual {p0, v0}, Landroid/app/Activity;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;\n");
+            sb.append("    move-result-object v0\n");
+            sb.append("    check-cast v0, Landroid/app/KeyguardManager;\n");
+            sb.append("    const-string v1, \"MP Manager protection\"\n");
+            sb.append("    const-string v2, \"Unlock protected application\"\n");
+            sb.append("    invoke-virtual {v0, v1, v2}, Landroid/app/KeyguardManager;->createConfirmDeviceCredentialIntent(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Landroid/content/Intent;\n");
+            sb.append("    move-result-object v1\n");
+            sb.append("    if-eqz v1, :mp_fingerprint_shown\n");
+            sb.append("    const/16 v2, 0x2b67\n");
+            sb.append("    invoke-virtual {p0, v1, v2}, Landroid/app/Activity;->startActivityForResult(Landroid/content/Intent;I)V\n");
+            sb.append("    const/4 v0, 0x0\n");
+            sb.append("    return v0\n");
+            sb.append("    :mp_fingerprint_shown\n");
+        }
+
+        if ((opts.requirePin || opts.requirePassword) && !isBlank(opts.credential)
+                && !isBlank(listenerType)) {
+            sb.append("    new-instance v0, Landroid/widget/EditText;\n");
+            sb.append("    invoke-direct {v0, p0}, Landroid/widget/EditText;-><init>(Landroid/content/Context;)V\n");
+            sb.append("    const/16 v1, 0x81\n");
+            sb.append("    invoke-virtual {v0, v1}, Landroid/widget/EditText;->setInputType(I)V\n");
+            sb.append("    new-instance v1, Landroid/app/AlertDialog$Builder;\n");
+            sb.append("    invoke-direct {v1, p0}, Landroid/app/AlertDialog$Builder;-><init>(Landroid/content/Context;)V\n");
+            sb.append("    const-string v2, \"Protected section\"\n");
+            sb.append("    invoke-virtual {v1, v2}, Landroid/app/AlertDialog$Builder;->setTitle(Ljava/lang/CharSequence;)Landroid/app/AlertDialog$Builder;\n");
+            sb.append("    const-string v2, \"Enter the configured PIN or password\"\n");
+            sb.append("    invoke-virtual {v1, v2}, Landroid/app/AlertDialog$Builder;->setMessage(Ljava/lang/CharSequence;)Landroid/app/AlertDialog$Builder;\n");
+            sb.append("    invoke-virtual {v1, v0}, Landroid/app/AlertDialog$Builder;->setView(Landroid/view/View;)Landroid/app/AlertDialog$Builder;\n");
+            sb.append("    const/4 v2, 0x0\n");
+            sb.append("    invoke-virtual {v1, v2}, Landroid/app/AlertDialog$Builder;->setCancelable(Z)Landroid/app/AlertDialog$Builder;\n");
+            sb.append("    new-instance v3, ").append(listenerType).append("\n");
+            sb.append("    const-string v4, \"").append(escapeSmali(opts.credential)).append("\"\n");
+            sb.append("    const-string v5, \"").append(escapeSmali(classDescriptor)).append("\"\n");
+            sb.append("    invoke-direct {v3, p0, v0, p1, v4, v5}, ")
+                    .append(listenerType)
+                    .append("-><init>(Landroid/app/Activity;Landroid/widget/EditText;Landroid/os/Bundle;Ljava/lang/String;Ljava/lang/String;)V\n");
+            sb.append("    const-string v4, \"Unlock\"\n");
+            sb.append("    invoke-virtual {v1, v4, v3}, Landroid/app/AlertDialog$Builder;->setPositiveButton(Ljava/lang/CharSequence;Landroid/content/DialogInterface$OnClickListener;)Landroid/app/AlertDialog$Builder;\n");
+            sb.append("    invoke-virtual {v1}, Landroid/app/AlertDialog$Builder;->create()Landroid/app/AlertDialog;\n");
+            sb.append("    move-result-object v1\n");
+            sb.append("    invoke-virtual {v1}, Landroid/app/AlertDialog;->show()V\n");
+            sb.append("    const/4 v0, 0x0\n");
+            sb.append("    return v0\n");
+        }
+
+        sb.append("    const/4 v0, 0x1\n");
+        sb.append("    return v0\n");
+        sb.append(".end method\n");
+        return sb.toString();
+    }
+
+    private static boolean isBlank(String value) {
+        return value == null || value.trim().isEmpty();
+    }
+
+    private static byte[] hexSha256ToBytes(String hex) {
+        String clean = hex == null ? "" : hex.replace(":", "").replace(" ", "").trim();
+        if (clean.length() % 2 != 0) return new byte[0];
+        try {
+            byte[] out = new byte[clean.length() / 2];
+            for (int i = 0; i < out.length; i++) {
+                out[i] = (byte) Integer.parseInt(clean.substring(i * 2, i * 2 + 2), 16);
+            }
+            return out;
+        } catch (Exception e) {
+            return new byte[0];
+        }
+    }
+
+    static String protectionListenerSmali(String listenerType, String classDescriptor) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(".class public ").append(listenerType).append("\n");
+        sb.append(".super Ljava/lang/Object;\n");
+        sb.append(".implements Landroid/content/DialogInterface$OnClickListener;\n");
+        sb.append(".field private activity:Landroid/app/Activity;\n");
+        sb.append(".field private input:Landroid/widget/EditText;\n");
+        sb.append(".field private bundle:Landroid/os/Bundle;\n");
+        sb.append(".field private credential:Ljava/lang/String;\n");
+        sb.append(".field private classDescriptor:Ljava/lang/String;\n\n");
+        sb.append(".method public constructor <init>(Landroid/app/Activity;Landroid/widget/EditText;Landroid/os/Bundle;Ljava/lang/String;Ljava/lang/String;)V\n");
+        sb.append("    .locals 1\n");
+        sb.append("    invoke-direct {p0}, Ljava/lang/Object;-><init>()V\n");
+        sb.append("    iput-object p1, p0, ").append(listenerType).append("->activity:Landroid/app/Activity;\n");
+        sb.append("    iput-object p2, p0, ").append(listenerType).append("->input:Landroid/widget/EditText;\n");
+        sb.append("    iput-object p3, p0, ").append(listenerType).append("->bundle:Landroid/os/Bundle;\n");
+        sb.append("    iput-object p4, p0, ").append(listenerType).append("->credential:Ljava/lang/String;\n");
+        sb.append("    iput-object p5, p0, ").append(listenerType).append("->classDescriptor:Ljava/lang/String;\n");
+        sb.append("    return-void\n");
+        sb.append(".end method\n\n");
+        sb.append(".method public onClick(Landroid/content/DialogInterface;I)V\n");
+        sb.append("    .locals 3\n");
+        sb.append("    iget-object v0, p0, ").append(listenerType).append("->input:Landroid/widget/EditText;\n");
+        sb.append("    invoke-virtual {v0}, Landroid/widget/EditText;->getText()Landroid/text/Editable;\n");
+        sb.append("    move-result-object v0\n");
+        sb.append("    invoke-virtual {v0}, Ljava/lang/Object;->toString()Ljava/lang/String;\n");
+        sb.append("    move-result-object v0\n");
+        sb.append("    iget-object v1, p0, ").append(listenerType).append("->credential:Ljava/lang/String;\n");
+        sb.append("    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z\n");
+        sb.append("    move-result v2\n");
+        sb.append("    if-nez v2, :mp_unlock_ok\n");
+        sb.append("    iget-object v0, p0, ").append(listenerType).append("->activity:Landroid/app/Activity;\n");
+        sb.append("    invoke-virtual {v0}, Landroid/app/Activity;->finish()V\n");
+        sb.append("    return-void\n");
+        sb.append("    :mp_unlock_ok\n");
+        sb.append("    iget-object v0, p0, ").append(listenerType).append("->activity:Landroid/app/Activity;\n");
+        sb.append("    iget-object v1, p0, ").append(listenerType).append("->bundle:Landroid/os/Bundle;\n");
+        sb.append("    invoke-direct {v0, v1}, ").append(classDescriptor).append("->onCreate$mpmanager(Landroid/os/Bundle;)V\n");
+        sb.append("    return-void\n");
+        sb.append(".end method\n");
+        return sb.toString();
+    }
+
+    static String wrapperSmali(String classDescriptor, String flags, boolean callToast,
+                               boolean callDialog, boolean callProtection) {
         StringBuilder sb = new StringBuilder();
         sb.append(".method ").append(flags).append(" onCreate(Landroid/os/Bundle;)V\n");
-        sb.append("    .locals 1\n");
+        sb.append("    .locals 2\n");
+        if (callProtection) {
+            sb.append("    invoke-direct {p0}, ").append(classDescriptor)
+                    .append("->mpmanagerProtection()Z\n");
+            sb.append("    move-result v1\n");
+            sb.append("    if-eqz v1, :mpmanager_unlock_failed\n");
+        }
         if (callToast) {
             sb.append("    invoke-direct {p0}, ").append(classDescriptor).append("->").append(TOAST_HELPER).append("()V\n");
         }
@@ -1197,6 +1399,10 @@ public class OverlayInjectorUtil {
         }
         sb.append("    invoke-direct {p0, p1}, ").append(classDescriptor).append("->onCreate$mpmanager(Landroid/os/Bundle;)V\n");
         sb.append("    return-void\n");
+        if (callProtection) {
+            sb.append("    :mpmanager_unlock_failed\n");
+            sb.append("    return-void\n");
+        }
         sb.append(".end method\n");
         return sb.toString();
     }
@@ -1562,7 +1768,19 @@ public class OverlayInjectorUtil {
             String blinkListener = null;
             String dismissListener = null;
             String waveRgb = null;
+            String protectionListener = null;
             if (dialog != null) {
+                if (dialog.protection != null && dialog.protection.enabled) {
+                    if (dialog.protection.requirePin || dialog.protection.requirePassword) {
+                        protectionListener = classDescriptor.substring(0, classDescriptor.length() - 1) + "$mpProtection;";
+                        File listenerFile = new File(smaliFile.getParentFile(),
+                                smaliFile.getName().replace(".smali", "$mpProtection.smali"));
+                        writeFile(listenerFile, protectionListenerSmali(protectionListener, classDescriptor));
+                        patchedFiles.add(listenerFile);
+                        if (logger != null) logger.logMessage(context.getString(R.string.logger_generated, protectionListener));
+                    }
+                    insert.append(protectionHelperSmali(classDescriptor, dialog.protection, protectionListener)).append("\n");
+                }
                 if (hasUrl(dialog)) {
                     urlListener = classDescriptor.substring(0, classDescriptor.length() - 1) + "$mpUrl;";
                     File listenerFile = new File(smaliFile.getParentFile(),
@@ -1630,7 +1848,8 @@ public class OverlayInjectorUtil {
                 insert.append(dialogHelperSmali(classDescriptor, dialog, urlListener, urlViewListener, noshowListener, blinkListener, dismissListener, fontAssets, waveRgb)).append("\n");
             }
             insert.append(wrapperSmali(classDescriptor, flags.isEmpty() ? "protected" : flags,
-                    toast != null, dialog != null));
+                    toast != null, dialog != null,
+                    dialog != null && dialog.protection != null && dialog.protection.enabled));
             String renamed = matcher.group(1) + "private onCreate$mpmanager(Landroid/os/Bundle;)V";
             String patched = matcher.replaceFirst(Matcher.quoteReplacement( renamed));
             if (!patched.endsWith("\n")) patched += "\n";

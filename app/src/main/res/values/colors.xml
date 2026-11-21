@@ -2,4 +2,14 @@
 
 <resources>
     <color name="md_theme_primary">#AAC7FF</color>
+    <color name="overlay_editor_primary">#806B55</color>
+    <color name="overlay_editor_on_primary">#FFFFFF</color>
+    <color name="overlay_editor_primary_container">#E9DDCC</color>
+    <color name="overlay_editor_secondary">#C6AD8F</color>
+    <color name="overlay_editor_surface">#FAF7F1</color>
+    <color name="overlay_editor_panel">#F5F0E6</color>
+    <color name="overlay_editor_canvas">#EEE7DB</color>
+    <color name="overlay_editor_divider">#D8C3A5</color>
+    <color name="overlay_editor_text">#302A24</color>
+    <color name="overlay_editor_outline">#D8C3A5</color>
 </resources>

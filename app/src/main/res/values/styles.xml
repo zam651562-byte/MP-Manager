@@ -75,6 +75,26 @@
         <item name="android:windowElevation">8dp</item>
     </style>
 
+    <style name="OverlayEditorTheme" parent="ThemeOverlay.Material3.Dialog.Alert">
+        <item name="colorPrimary">@color/overlay_editor_primary</item>
+        <item name="colorOnPrimary">@color/overlay_editor_on_primary</item>
+        <item name="colorPrimaryContainer">@color/overlay_editor_primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/overlay_editor_text</item>
+        <item name="colorSecondary">@color/overlay_editor_secondary</item>
+        <item name="colorOnSecondary">@color/overlay_editor_text</item>
+        <item name="colorSurface">@color/overlay_editor_surface</item>
+        <item name="colorOnSurface">@color/overlay_editor_text</item>
+        <item name="colorOutline">@color/overlay_editor_outline</item>
+        <item name="colorOutlineVariant">@color/overlay_editor_outline</item>
+        <item name="android:colorAccent">@color/overlay_editor_primary</item>
+    </style>
+
+    <style name="OverlayEditorSectionLabel">
+        <item name="android:textColor">@color/overlay_editor_primary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="MpDialogAnimations">
         <item name="android:windowEnterAnimation">@anim/mp_dialog_enter</item>
         <item name="android:windowExitAnimation">@anim/mp_dialog_exit</item>

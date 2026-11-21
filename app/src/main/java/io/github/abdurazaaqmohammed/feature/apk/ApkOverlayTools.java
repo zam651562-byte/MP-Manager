@@ -34,6 +34,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ContextThemeWrapper;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -76,6 +77,7 @@ import org.apache.commons.io.FilenameUtils;
 
 import io.github.abdurazaaqmohammed.ui.main.MainActivity;
 import io.github.abdurazaaqmohammed.MPManager.R;
+import io.github.abdurazaaqmohammed.ui.common.base.BaseDialog;
 import io.github.abdurazaaqmohammed.ui.main.UIHelper;
 import io.github.abdurazaaqmohammed.ui.UiFields;
 import io.github.abdurazaaqmohammed.ui.editor.FilePickerDialog;
@@ -280,6 +282,13 @@ public class ApkOverlayTools {
         MaterialSwitch dontShowSwitch;
         MaterialSwitch dlgHtml;
         MaterialSwitch dlgB64;
+        MaterialSwitch protectionEnabled;
+        MaterialSwitch protectionSignature;
+        MaterialSwitch protectionComponents;
+        MaterialSwitch protectionPin;
+        MaterialSwitch protectionPassword;
+        MaterialSwitch protectionFingerprint;
+        TextInputEditText protectionCredential;
         LinearLayout toastSection;
         LinearLayout dialogSection;
         LinearLayout posBox;
@@ -353,6 +362,13 @@ public class ApkOverlayTools {
         f.dontShowSwitch = view.findViewById(R.id.overlayDlgDontShow);
         f.dlgHtml = view.findViewById(R.id.overlayDlgHtml);
         f.dlgB64 = view.findViewById(R.id.overlayDlgB64);
+        f.protectionEnabled = view.findViewById(R.id.overlayProtectionEnabled);
+        f.protectionSignature = view.findViewById(R.id.overlayProtectionSignature);
+        f.protectionComponents = view.findViewById(R.id.overlayProtectionComponents);
+        f.protectionPin = view.findViewById(R.id.overlayProtectionPin);
+        f.protectionPassword = view.findViewById(R.id.overlayProtectionPassword);
+        f.protectionFingerprint = view.findViewById(R.id.overlayProtectionFingerprint);
+        f.protectionCredential = view.findViewById(R.id.overlayProtectionCredential);
         f.toastSection = view.findViewById(R.id.overlayToastSection);
         f.dialogSection = view.findViewById(R.id.overlayDialogSection);
         f.posBox = view.findViewById(R.id.overlayPosBox);
@@ -409,6 +425,26 @@ public class ApkOverlayTools {
         return toast;
     }
 
+    private void collectProtection(OverlayForm f, OverlayInjectorUtil.DialogOptions dlg) {
+        if (f == null || dlg == null || f.protectionEnabled == null) return;
+        OverlayInjectorUtil.ProtectionOptions protection =
+                new OverlayInjectorUtil.ProtectionOptions();
+        protection.enabled = f.protectionEnabled.isChecked();
+        protection.verifySignature = f.protectionSignature.isChecked();
+        protection.verifyComponents = f.protectionComponents.isChecked();
+        protection.requirePin = f.protectionPin.isChecked();
+        protection.requirePassword = f.protectionPassword.isChecked();
+        protection.requireFingerprint = f.protectionFingerprint.isChecked();
+        protection.credential = textOf(f.protectionCredential);
+        if (protection.enabled
+                && (protection.requirePin || protection.requirePassword)
+                && protection.credential.isEmpty()) {
+            Extensions.showMessage(context, "Enter a PIN or password for protection");
+            protection.enabled = false;
+        }
+        dlg.protection = protection;
+    }
+
     private OverlayInjectorUtil.DialogOptions collectDialog(OverlayForm f) {
         OverlayInjectorUtil.DialogOptions dlg = new OverlayInjectorUtil.DialogOptions();
         dlg.title = textOf(f.titleInput);
@@ -430,6 +466,7 @@ public class ApkOverlayTools {
         dlg.titleColor = f.titleC;
         dlg.dlgFont = f.dlgFont;
         dlg.dlgFontPath = f.dlgFontPath;
+        collectProtection(f, dlg);
         if (dlg.message.isEmpty() && dlg.title.isEmpty()) {
             Extensions.showMessage(context, "Enter a title or message");
             return null;
@@ -460,6 +497,7 @@ public class ApkOverlayTools {
         collectStyle(f, dlg);
         dlg.dlgFont = f.advFont;
         dlg.dlgFontPath = f.advFontPath;
+        collectProtection(f, dlg);
         dlg.cancelable = f.cancelSwitch.isChecked();
         boolean hasButton = false;
         for (OverlayInjectorUtil.AdvWidget w : dlg.widgets) {
@@ -2281,7 +2319,8 @@ public class ApkOverlayTools {
         view.findViewById(R.id.overlaySignSettings).setOnClickListener(uiHelper.showSignSettingsDialog());
         activeOverlayForm = form;
 
-        AlertDialog overlayDialog = dialogUtil.getDialogBuilder()
+        AlertDialog overlayDialog = new BaseDialog.EnhancedBuilder(
+                new ContextThemeWrapper(context, R.style.OverlayEditorTheme))
                 .setTitle(R.string.toast_dialog)
                 .setView(view)
                 .setPositiveButton(android.R.string.ok, (d, w) -> {
