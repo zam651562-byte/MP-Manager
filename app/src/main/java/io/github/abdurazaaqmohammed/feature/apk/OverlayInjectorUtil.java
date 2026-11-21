@@ -151,11 +151,61 @@ public class OverlayInjectorUtil {
         return c;
     }
 
+    public static void validateOptions(ToastOptions toast, DialogOptions dialog) throws IOException {
+        if (toast == null && dialog == null) throw new IOException("Nothing to inject");
+        if (toast != null && dialog != null) throw new IOException("Choose exactly one injection mode");
+        if (toast != null && (toast.message == null || toast.message.trim().isEmpty())) {
+            throw new IOException("Toast message is required");
+        }
+        if (dialog != null) {
+            if ((dialog.title == null || dialog.title.trim().isEmpty())
+                    && (dialog.message == null || dialog.message.trim().isEmpty())
+                    && (dialog.widgets == null || dialog.widgets.isEmpty())) {
+                throw new IOException("Dialog title, message, or widgets are required");
+            }
+            if (dialog.advanced) {
+                if (dialog.widgets == null || dialog.widgets.isEmpty()) {
+                    throw new IOException("Advanced dialog has no widgets");
+                }
+                for (AdvWidget widget : dialog.widgets) {
+                    if (widget == null || widget.kind == null || widget.kind.trim().isEmpty()) {
+                        throw new IOException("Advanced widget kind is required");
+                    }
+                }
+            }
+        }
+    }
+
+    public static File createBackup(File inputApk) throws IOException {
+        if (inputApk == null || !inputApk.isFile()) throw new IOException("APK file does not exist");
+        String base = FilenameUtils.getBaseName(inputApk.getName());
+        File backup = new File(inputApk.getParentFile(),
+                base + "_original_" + System.currentTimeMillis() + ".apk.bak");
+        try (FileInputStream in = new FileInputStream(inputApk);
+             FileOutputStream out = new FileOutputStream(backup)) {
+            byte[] buffer = new byte[8192];
+            int read;
+            while ((read = in.read(buffer)) != -1) out.write(buffer, 0, read);
+        }
+        return backup;
+    }
+
+    public static void restoreBackup(File backup, File destination) throws IOException {
+        if (backup == null || !backup.isFile()) throw new IOException("Backup does not exist");
+        if (destination == null) throw new IOException("Restore destination is missing");
+        try (FileInputStream in = new FileInputStream(backup);
+             FileOutputStream out = new FileOutputStream(destination)) {
+            byte[] buffer = new byte[8192];
+            int read;
+            while ((read = in.read(buffer)) != -1) out.write(buffer, 0, read);
+        }
+    }
+
     public static File addOverlayToActivities(Context context, File inputApk,
                                               List<String> activityClassNames,
                                               ToastOptions toast, DialogOptions dialog,
                                               APKLogger logger) throws Exception {
-        if (toast == null && dialog == null) throw new IOException("Nothing to inject");
+        validateOptions(toast, dialog);
         debugInit(context);
         debug("input=" + inputApk.getAbsolutePath());
         debug("activities=" + activityClassNames);

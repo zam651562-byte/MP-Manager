@@ -887,6 +887,93 @@
                 android:layout_marginTop="8dp" />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/overlayCodeSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="8dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/overlayCodeToggle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Manual Code Editor" />
+
+            <LinearLayout
+                android:id="@+id/overlayCodeBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/overlayCodeEditor"
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    android:gravity="top|start"
+                    android:inputType="textMultiLine|textNoSuggestions"
+                    android:fontFamily="monospace"
+                    android:textSize="12sp"
+                    android:scrollbars="vertical"
+                    android:overScrollMode="always" />
+
+                <TextView
+                    android:id="@+id/overlayCodeStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="JSON configuration" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/overlayCodeFormat"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Format" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/overlayCodeApply"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Apply" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/overlayCodeCopy"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Copy" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/overlayCodePaste"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Paste" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/overlayCodeImport"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Import" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/overlayCodeExport"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Export" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/overlayAutosign"
             android:layout_width="wrap_content"

@@ -4,6 +4,7 @@ import io.github.abdurazaaqmohammed.feature.apk.OverlayInjectorUtil;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -25,6 +26,52 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class OverlaySmaliAuditTest {
+
+    @Test
+    public void overlaySpecRoundTripAndValidation() throws Exception {
+        OverlayInjectorUtil.ToastOptions toast = new OverlayInjectorUtil.ToastOptions();
+        toast.message = "Hello";
+        toast.longDuration = true;
+        toast.gravity = 48;
+        String json = OverlaySpecCodec.encodeToast(toast);
+        OverlaySpecCodec.Spec spec = OverlaySpecCodec.decode(json);
+        assertNotNull(spec.toast);
+        assertEquals("Hello", spec.toast.message);
+
+        File file = File.createTempFile("overlay-spec", ".json");
+        try {
+            OverlaySpecCodec.write(file, json);
+            OverlaySpecCodec.Spec imported = OverlaySpecCodec.read(file);
+            assertNotNull(imported.toast);
+            assertEquals(48, imported.toast.gravity);
+        } finally {
+            file.delete();
+        }
+
+        try {
+            OverlaySpecCodec.decode("{\"toast\":{\"message\":\"\"}}");
+            fail("Empty toast should fail validation");
+        } catch (java.io.IOException expected) {
+            assertTrue(expected.getMessage().contains("Toast message"));
+        }
+    }
+
+    @Test
+    public void backupAndRestorePreserveOriginalBytes() throws Exception {
+        File original = File.createTempFile("overlay-original", ".apk");
+        try (FileOutputStream out = new FileOutputStream(original)) {
+            out.write(new byte[]{1, 2, 3, 4, 5});
+        }
+        File backup = OverlayInjectorUtil.createBackup(original);
+        try (FileOutputStream out = new FileOutputStream(original)) {
+            out.write(new byte[]{9, 9});
+        }
+        OverlayInjectorUtil.restoreBackup(backup, original);
+        byte[] restored = java.nio.file.Files.readAllBytes(original.toPath());
+        assertTrue(Arrays.equals(new byte[]{1, 2, 3, 4, 5}, restored));
+        backup.delete();
+        original.delete();
+    }
 
     private static final String CLS = "Lcom/abdurazaagmohammed/AntiSplit/main/MainActivity;";
     private static final String URL = "Lcom/abdurazaagmohammed/AntiSplit/main/MainActivity$mpUrl;";

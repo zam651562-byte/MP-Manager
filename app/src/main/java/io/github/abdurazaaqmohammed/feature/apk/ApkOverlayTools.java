@@ -65,12 +65,14 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import org.apache.commons.io.FilenameUtils;
 
 import io.github.abdurazaaqmohammed.ui.main.MainActivity;
 import io.github.abdurazaaqmohammed.MPManager.R;
@@ -2109,6 +2111,130 @@ public class ApkOverlayTools {
             refreshProfiles(form, isToast);
         });
 
+        View codeBox = view.findViewById(R.id.overlayCodeBox);
+        EditText codeEditor = view.findViewById(R.id.overlayCodeEditor);
+        TextView codeStatus = view.findViewById(R.id.overlayCodeStatus);
+        view.findViewById(R.id.overlayCodeToggle).setOnClickListener(v -> {
+            boolean show = codeBox.getVisibility() != View.VISIBLE;
+            codeBox.setVisibility(show ? View.VISIBLE : View.GONE);
+            if (show) {
+                String json;
+                if (toastSection.getVisibility() == View.VISIBLE) {
+                    OverlayInjectorUtil.ToastOptions toastSpec = collectToast(form);
+                    json = toastSpec == null ? "" : OverlaySpecCodec.encodeToast(toastSpec);
+                } else if (advancedSection.getVisibility() == View.VISIBLE) {
+                    OverlayInjectorUtil.DialogOptions dialogSpec = collectAdvanced(form, advWidgets);
+                    json = dialogSpec == null ? "" : OverlaySpecCodec.encodeDialog(dialogSpec);
+                } else {
+                    OverlayInjectorUtil.DialogOptions dialogSpec = collectDialog(form);
+                    json = dialogSpec == null ? "" : OverlaySpecCodec.encodeDialog(dialogSpec);
+                }
+                codeEditor.setText(json);
+                codeStatus.setText(json.isEmpty() ? "No valid configuration" : "Visual configuration synchronized");
+            }
+        });
+        codeEditor.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    OverlaySpecCodec.decode(s == null ? "" : s.toString());
+                    codeStatus.setText("Valid JSON");
+                } catch (IOException e) {
+                    codeStatus.setText(e.getMessage());
+                }
+            }
+            public void afterTextChanged(Editable s) {}
+        });
+        view.findViewById(R.id.overlayCodeFormat).setOnClickListener(v -> {
+            try {
+                String formatted = OverlaySpecCodec.format(codeEditor.getText().toString());
+                codeEditor.setText(formatted);
+                codeEditor.setSelection(0);
+                codeStatus.setText("Formatted successfully");
+            } catch (IOException e) {
+                codeStatus.setText(e.getMessage());
+            }
+        });
+        view.findViewById(R.id.overlayCodeApply).setOnClickListener(v -> {
+            try {
+                OverlaySpecCodec.Spec spec = OverlaySpecCodec.decode(codeEditor.getText().toString());
+                if (spec.toast != null) {
+                    modeTv.setText(toast, false);
+                    syncModeSections.run();
+                    applyToast(form, spec.toast);
+                    updatePreview.run();
+                } else {
+                    modeTv.setText(spec.dialog.advanced ? adv : dialog, false);
+                    syncModeSections.run();
+                    if (spec.dialog.advanced) {
+                        applyAdvanced(form, advWidgets, advSelected, spec.dialog);
+                        renderAdv[0].run();
+                        showAdvProps[0].run();
+                    } else {
+                        applyDialog(form, spec.dialog);
+                    }
+                    updatePreview.run();
+                }
+                codeStatus.setText("Applied to visual designer");
+            } catch (IOException e) {
+                codeStatus.setText(e.getMessage());
+            }
+        });
+        view.findViewById(R.id.overlayCodeCopy).setOnClickListener(v -> {
+            ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+            if (clipboard != null) {
+                clipboard.setPrimaryClip(ClipData.newPlainText("MPManager overlay", codeEditor.getText()));
+                codeStatus.setText("Copied to clipboard");
+            }
+        });
+        view.findViewById(R.id.overlayCodePaste).setOnClickListener(v -> {
+            ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+            if (clipboard == null || !clipboard.hasPrimaryClip()
+                    || clipboard.getPrimaryClip() == null
+                    || clipboard.getPrimaryClip().getItemCount() == 0) {
+                codeStatus.setText("Clipboard is empty");
+                return;
+            }
+            CharSequence text = clipboard.getPrimaryClip().getItemAt(0).coerceToText(context);
+            codeEditor.setText(text == null ? "" : text);
+        });
+        view.findViewById(R.id.overlayCodeImport).setOnClickListener(v -> {
+            FilePickerDialog.Properties props = new FilePickerDialog.Properties();
+            props.selection_mode = FilePickerDialog.SINGLE_MODE;
+            props.selection_type = FilePickerDialog.FILE_SELECT;
+            props.extensions = new String[]{"json"};
+            props.root = file.getParentFile();
+            FilePickerDialog picker = new FilePickerDialog(context, props);
+            picker.setTitle("Import overlay configuration");
+            picker.setDialogSelectionListener(files -> {
+                if (files == null || files.length == 0) return;
+                try (FileInputStream fis = new FileInputStream(files[0]);
+                     ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+                    byte[] buf = new byte[8192];
+                    int read;
+                    while ((read = fis.read(buf)) != -1) out.write(buf, 0, read);
+                    String json = new String(out.toByteArray(), StandardCharsets.UTF_8);
+                    OverlaySpecCodec.Spec spec = OverlaySpecCodec.decode(json);
+                    codeEditor.setText(json);
+                    codeStatus.setText("Imported: " + spec.version);
+                } catch (Exception e) {
+                    codeStatus.setText("Import failed: " + e.getMessage());
+                }
+            });
+            picker.show();
+        });
+        view.findViewById(R.id.overlayCodeExport).setOnClickListener(v -> {
+            try {
+                String json = OverlaySpecCodec.format(codeEditor.getText().toString());
+                File target = new File(file.getParentFile(),
+                        FilenameUtils.getBaseName(file.getName()) + "_overlay_config.json");
+                OverlaySpecCodec.write(target, json);
+                codeStatus.setText("Exported: " + target.getAbsolutePath());
+            } catch (Exception e) {
+                codeStatus.setText("Export failed: " + e.getMessage());
+            }
+        });
+
         overlayImagePreviewView = view.findViewById(R.id.overlayDlgImagePreview);
         overlayImagePreviewView.setVisibility(View.GONE);
         overlayImagePreviewView.setImageBitmap(null);
@@ -2457,10 +2583,18 @@ public class ApkOverlayTools {
             APKLogger logger = pm.getLogger();
             new Thread(() -> {
                 try {
+                    File backup = OverlayInjectorUtil.createBackup(file);
+                    if (logger != null) {
+                        logger.logMessage("Original APK backed up: " + backup.getName());
+                    }
                     File result = OverlayInjectorUtil.addOverlayToActivities(context, file, selectedActivities, toast, dialog, logger);
                     if (sign) wrapper[0].signApk(result);
                     pm.dismiss();
                     context.handler.post(context::refreshAllPanes);
+                    context.handler.post(() ->
+                            Extensions.showMessage(context,
+                                    "Injection complete: " + result.getName()
+                                            + "\nBackup: " + backup.getName()));
                 } catch (Exception e) {
                     pm.dismiss();
                     new ErrorUtil(context).showError(e);
