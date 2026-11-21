@@ -12,6 +12,7 @@
  * copies or substantial portions of the Software.
  */
 package io.github.codehasan.colorpicker.services;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -588,7 +589,7 @@ public class ColorPickerService extends Service implements MagnifierView.OnInter
     private void copyToClipboard(String label, String text) {
         ClipData clip = ClipData.newPlainText(label, text);
         clipboard.setPrimaryClip(clip);
-        Toast.makeText(
+        ToastEngine.makeText(
                 this,
                 getString(R.string.copied_to_clipboard, label),
                 Toast.LENGTH_SHORT

@@ -1,4 +1,5 @@
 package io.github.abdurazaaqmohammed.ui.common.util;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -21,6 +22,8 @@ import androidx.appcompat.widget.ButtonBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 
+import io.github.abdurazaaqmohammed.ui.common.base.BaseDialog;
+
 public class DialogUtil {
     private final Activity context;
 
@@ -29,7 +32,7 @@ public class DialogUtil {
     }
 
     public MaterialAlertDialogBuilder getDialogBuilder() {
-        return new MaterialAlertDialogBuilder(context);
+        return new BaseDialog.EnhancedBuilder(context);
     }
 
     /**
@@ -123,6 +126,7 @@ public class DialogUtil {
     public void styleAlertDialog(AlertDialog ad) {
         context.runOnUiThread(() -> {
             ad.show();
+            BaseDialog.enhance(ad);
             keepButtonsHorizontal(ad);
         });
     }
@@ -136,7 +140,7 @@ public class DialogUtil {
         try {
             launcher.launch(intent);
         } catch (ActivityNotFoundException e) {
-            Toast.makeText(activity, "Enter output directory path manually", Toast.LENGTH_SHORT).show();
+            ToastEngine.makeText(activity, "Enter output directory path manually", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -1,4 +1,5 @@
 package io.github.abdurazaaqmohammed.ui.editor;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import android.app.Activity;
 import android.content.ClipData;
@@ -347,7 +348,7 @@ public final class DrawablePreviewDialog {
             ApkDrawableRenderer.Result r = result;
             String xml = r != null ? r.xml : fallbackXml;
             if (xml == null || xml.isEmpty()) {
-                Toast.makeText(activity, R.string.cannot_open_item, Toast.LENGTH_SHORT).show();
+                ToastEngine.makeText(activity, R.string.cannot_open_item, Toast.LENGTH_SHORT).show();
                 return;
             }
             ScrollView scroll = new ScrollView(activity);
@@ -400,7 +401,7 @@ public final class DrawablePreviewDialog {
                     });
                 } catch (Throwable t) {
                     post(() -> {
-                        if (alive()) Toast.makeText(activity,
+                        if (alive()) ToastEngine.makeText(activity,
                                 R.string.drawable_preview_share_failed,
                                 Toast.LENGTH_SHORT).show();
                     });

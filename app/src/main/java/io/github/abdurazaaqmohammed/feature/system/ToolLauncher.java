@@ -1,4 +1,5 @@
 package io.github.abdurazaaqmohammed.feature.system;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import android.app.Activity;
 import android.content.Context;
@@ -33,7 +34,7 @@ public final class ToolLauncher {
         }
         if (ToolRegistry.findById(activity, id) == null) return false;
         if (!ToolRegistry.isAvailable(activity, id)) {
-            Toast.makeText(activity, R.string.tool_requires_root, Toast.LENGTH_LONG).show();
+            ToastEngine.makeText(activity, R.string.tool_requires_root, Toast.LENGTH_LONG).show();
             return true;
         }
         if (activity instanceof AppCompatActivity host) {

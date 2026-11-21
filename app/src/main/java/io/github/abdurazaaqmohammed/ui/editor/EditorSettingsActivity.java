@@ -1,4 +1,5 @@
 package io.github.abdurazaaqmohammed.ui.editor;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import android.app.Activity;
 import android.content.Context;
@@ -72,7 +73,7 @@ public class EditorSettingsActivity extends BaseActivity {
                 apiKeyPref.setOnPreferenceChangeListener((preference, newValue) -> {
                     String apiKey = ((String) newValue).trim();
                     if (apiKey.isEmpty()) {
-                        Toast.makeText(requireContext(), "Input key", Toast.LENGTH_SHORT).show();
+                        ToastEngine.makeText(requireContext(), "Input key", Toast.LENGTH_SHORT).show();
                         return false;
                     }
                     preference.setSummary(formatApiKeySummary(apiKey));
@@ -111,16 +112,16 @@ public class EditorSettingsActivity extends BaseActivity {
             Context ctx = getContext();
             if (ctx == null) return;
             if (modder.hub.dexeditor.fragment.SettingsFragment.getChatGptApiKey(ctx).trim().isEmpty()) {
-                if (manual) Toast.makeText(ctx, "Set API key first", Toast.LENGTH_SHORT).show();
+                if (manual) ToastEngine.makeText(ctx, "Set API key first", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (manual) Toast.makeText(ctx, "Fetching models", Toast.LENGTH_SHORT).show();
+            if (manual) ToastEngine.makeText(ctx, "Fetching models", Toast.LENGTH_SHORT).show();
             modder.hub.dexeditor.fragment.SettingsFragment.fetchGeminiModels(ctx, models -> {
                 Activity a = getActivity();
                 if (a == null || !isAdded()) return;
                 a.runOnUiThread(() -> {
                     if (models.isEmpty()) {
-                        if (manual) Toast.makeText(a, "No Gemini models found", Toast.LENGTH_SHORT).show();
+                        if (manual) ToastEngine.makeText(a, "No Gemini models found", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     ListPreference modelPref = findPreference("gemini_model");
@@ -134,7 +135,7 @@ public class EditorSettingsActivity extends BaseActivity {
                             modelPref.setValue(models.contains(fallback) ? fallback : models.get(0));
                         }
                     }
-                    if (manual) Toast.makeText(a, models.size() + " models loaded", Toast.LENGTH_SHORT).show();
+                    if (manual) ToastEngine.makeText(a, models.size() + " models loaded", Toast.LENGTH_SHORT).show();
                 });
             });
         }
@@ -149,7 +150,7 @@ public class EditorSettingsActivity extends BaseActivity {
                 startActivity(new Intent(Intent.ACTION_VIEW,
                         Uri.parse("https://aistudio.google.com/app/u/0/apikey")));
             } catch (Exception e) {
-                Toast.makeText(requireContext(), "No browser found", Toast.LENGTH_SHORT).show();
+                ToastEngine.makeText(requireContext(), "No browser found", Toast.LENGTH_SHORT).show();
             }
         }
 

@@ -1,4 +1,5 @@
 package io.github.abdurazaaqmohammed.ui.viewer;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -459,7 +460,7 @@ public class MediaPlayerActivity extends BaseActivity implements
         aspectMode = (aspectMode + 1) % 4;
         prefs.edit().putInt("video_aspect_mode", aspectMode).apply();
         fitVideo();
-        Toast.makeText(this, getString(R.string.aspect_mode, aspectName()), Toast.LENGTH_SHORT).show();
+        ToastEngine.makeText(this, getString(R.string.aspect_mode, aspectName()), Toast.LENGTH_SHORT).show();
         showControlsTemporarily();
     }
 
@@ -946,16 +947,16 @@ public class MediaPlayerActivity extends BaseActivity implements
             picker.setDialogSelectionListener(files -> {
                 if (files == null || files.length == 0 || files[0] == null) return;
                 if (playerManager.setExternalSubtitle(files[0])) {
-                    Toast.makeText(this, getString(R.string.subtitle_loaded,
+                    ToastEngine.makeText(this, getString(R.string.subtitle_loaded,
                             new File(files[0]).getName()), Toast.LENGTH_SHORT).show();
                     showControlsTemporarily();
                 } else {
-                    Toast.makeText(this, R.string.subtitle_unsupported, Toast.LENGTH_SHORT).show();
+                    ToastEngine.makeText(this, R.string.subtitle_unsupported, Toast.LENGTH_SHORT).show();
                 }
             });
             picker.show();
         } catch (Exception e) {
-            Toast.makeText(this, R.string.subtitle_unsupported, Toast.LENGTH_SHORT).show();
+            ToastEngine.makeText(this, R.string.subtitle_unsupported, Toast.LENGTH_SHORT).show();
         }
     }
 

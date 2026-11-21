@@ -1,4 +1,5 @@
 package io.github.abdurazaaqmohammed.feature.files;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import io.github.abdurazaaqmohammed.feature.apk.flutter.FlutterToolsDialog;
 import io.github.abdurazaaqmohammed.feature.sqlite.SqliteViewerActivity;
@@ -1330,7 +1331,7 @@ public class FileOpener {
                             ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
                             if (cm != null) {
                                 cm.setPrimaryClip(ClipData.newPlainText("Kernel Info", infoText));
-                                Toast.makeText(context, "Copied to clipboard", Toast.LENGTH_SHORT).show();
+                                ToastEngine.makeText(context, "Copied to clipboard", Toast.LENGTH_SHORT).show();
                             }
                         })
                         .show();
@@ -1363,7 +1364,7 @@ public class FileOpener {
                 context.runOnUiThread(() -> {
                     pm.dismiss();
                     context.refreshPane(true);
-                    Toast.makeText(context, "Exported: " + finalExportFile.getName() + " to Download", Toast.LENGTH_LONG).show();
+                    ToastEngine.makeText(context, "Exported: " + finalExportFile.getName() + " to Download", Toast.LENGTH_LONG).show();
                 });
             } catch (Exception e) {
                 context.runOnUiThread(() -> {
@@ -2090,7 +2091,7 @@ public class FileOpener {
                                 public void onSuccess(File result) {
                                     context.runOnUiThread(() -> {
                                         pm.dismiss();
-                                        Toast.makeText(context,
+                                        ToastEngine.makeText(context,
                                                 (isAr ? "تم فك الضغط بنجاح: " : "Unsparsed successfully: ") + result.getName(),
                                                 Toast.LENGTH_LONG).show();
                                         context.reloadCurrentFolder();

@@ -1,4 +1,5 @@
 package io.github.abdurazaaqmohammed.feature.translation;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import io.github.abdurazaaqmohammed.ui.common.util.DialogUtil;
 import io.github.abdurazaaqmohammed.util.misc.ErrorUtil;
@@ -101,14 +102,14 @@ public class TranslationExportDialog {
                             : formatSpinner.getSelectedItem().toString().toLowerCase(Locale.US);
 
                     if (outputPath.isEmpty()) {
-                        Toast.makeText(activity, R.string.invalid_file_path, Toast.LENGTH_SHORT).show();
+                        ToastEngine.makeText(activity, R.string.invalid_file_path, Toast.LENGTH_SHORT).show();
                         return;
                     }
 
                     File outputDir = new File(outputPath);
                     if (!outputDir.exists()) {
                         if (!outputDir.mkdirs()) {
-                            Toast.makeText(activity, R.string.cannot_create_directory,
+                            ToastEngine.makeText(activity, R.string.cannot_create_directory,
                                     Toast.LENGTH_SHORT).show();
                             return;
                         }
@@ -130,7 +131,7 @@ public class TranslationExportDialog {
 
                 activity.runOnUiThread(() -> {
                     if (result.success) {
-                        Toast.makeText(activity,
+                        ToastEngine.makeText(activity,
                                 activity.getString(R.string.exported_x,
                                         result.exportedFile.getAbsolutePath()),
                                 Toast.LENGTH_LONG).show();

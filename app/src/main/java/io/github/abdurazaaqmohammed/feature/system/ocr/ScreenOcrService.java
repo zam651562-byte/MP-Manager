@@ -1,4 +1,5 @@
 package io.github.abdurazaaqmohammed.feature.system.ocr;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import android.app.Activity;
 import android.app.NotificationChannel;
@@ -139,7 +140,7 @@ public final class ScreenOcrService extends Service {
             running = true;
             updateBubble();
         } catch (Exception | LinkageError error) {
-            Toast.makeText(this, getString(R.string.ocr_capture_start_failed, error.getMessage()), Toast.LENGTH_LONG).show();
+            ToastEngine.makeText(this, getString(R.string.ocr_capture_start_failed, error.getMessage()), Toast.LENGTH_LONG).show();
             stopSelf();
         }
         return START_NOT_STICKY;
@@ -311,7 +312,7 @@ public final class ScreenOcrService extends Service {
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
         } catch (Exception error) {
             uiVisible = false;
-            Toast.makeText(this, R.string.ocr_capture_failed, Toast.LENGTH_LONG).show();
+            ToastEngine.makeText(this, R.string.ocr_capture_failed, Toast.LENGTH_LONG).show();
         }
         // Begin reading immediately; the result UI can still cancel and choose
         // a tighter crop. This keeps normal copy-on-screen use to one bubble tap.
@@ -326,7 +327,7 @@ public final class ScreenOcrService extends Service {
         capturing = false;
         if (display != null) display.setSurface(null);
         updateBubble();
-        Toast.makeText(this, R.string.ocr_capture_failed, Toast.LENGTH_LONG).show();
+        ToastEngine.makeText(this, R.string.ocr_capture_failed, Toast.LENGTH_LONG).show();
     }
 
     @Override public void onConfigurationChanged(Configuration configuration) {

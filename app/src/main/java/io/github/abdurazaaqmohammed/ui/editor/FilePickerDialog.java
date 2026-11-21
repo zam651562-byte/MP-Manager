@@ -1,4 +1,5 @@
 package io.github.abdurazaaqmohammed.ui.editor;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import io.github.abdurazaaqmohammed.privilege.api.PrivilegeManager;
 
@@ -388,7 +389,7 @@ public class FilePickerDialog {
     private void returnSelection() {
         if (selectedPaths.isEmpty()) {
             if(context instanceof Activity a) Extensions.showMessage(a, R.string.select_none);
-            else Toast.makeText(context, R.string.select_none, Toast.LENGTH_SHORT).show();
+            else ToastEngine.makeText(context, R.string.select_none, Toast.LENGTH_SHORT).show();
             return;
         }
         delivered = true;

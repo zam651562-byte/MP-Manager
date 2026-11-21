@@ -1,4 +1,5 @@
 package io.github.abdurazaaqmohammed.data.prefs;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 
 import android.app.Activity;
@@ -154,7 +155,7 @@ public final class MinimizedEditors {
                 context.startActivity(item.reopenIntent);
             }
         } catch (Exception error) {
-            Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+            ToastEngine.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
         }
     }
 

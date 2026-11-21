@@ -1,4 +1,5 @@
 package io.github.abdurazaaqmohammed.feature.freestyle;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import android.content.ContentValues;
 import android.graphics.Bitmap;
@@ -78,7 +79,7 @@ public class FreeStyleCanvasActivity extends AppCompatActivity {
             // Toggles auto-crop to content bounds or trims canvas
             RectF bounds = canvasView.getLayersBoundingBox();
             if (bounds == null) {
-                Toast.makeText(this, "No images on canvas", Toast.LENGTH_SHORT).show();
+                ToastEngine.makeText(this, "No images on canvas", Toast.LENGTH_SHORT).show();
                 return;
             }
             saveCanvasCollage(true);
@@ -149,7 +150,7 @@ public class FreeStyleCanvasActivity extends AppCompatActivity {
     private void saveCanvasCollage(boolean autoCropToBounds) {
         Bitmap output = canvasView.renderToBitmap(autoCropToBounds);
         if (output == null) {
-            Toast.makeText(this, "Failed to capture canvas", Toast.LENGTH_SHORT).show();
+            ToastEngine.makeText(this, "Failed to capture canvas", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -193,9 +194,9 @@ public class FreeStyleCanvasActivity extends AppCompatActivity {
             final String finalSavedPath = savedPath;
             mainHandler.post(() -> {
                 if (finalSuccess) {
-                    Toast.makeText(this, getString(R.string.collage_saved, finalSavedPath), Toast.LENGTH_LONG).show();
+                    ToastEngine.makeText(this, getString(R.string.collage_saved, finalSavedPath), Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(this, "Error saving collage", Toast.LENGTH_SHORT).show();
+                    ToastEngine.makeText(this, "Error saving collage", Toast.LENGTH_SHORT).show();
                 }
             });
         });

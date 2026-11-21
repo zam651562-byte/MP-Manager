@@ -30,6 +30,7 @@
  */
 
 package modder.hub.dexeditor.fragment;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -748,7 +749,7 @@ public class EditorFragment extends Fragment implements SmaliMethodFieldListFrag
         builder.setSingleChoiceItems(appNames, selectedIndex, (dialog, which) -> selectedPackage[0] = resolveInfoList.get(which).activityInfo.packageName);
         builder.setPositiveButton("Save", (dialog, which) -> {
             if (selectedPackage[0].isEmpty()) {
-                Toast.makeText(requireContext(), "No app selected", Toast.LENGTH_SHORT).show();
+                ToastEngine.makeText(requireContext(), "No app selected", Toast.LENGTH_SHORT).show();
                 return;
             }
             preferencesEditor.putString("selectedPackage", selectedPackage[0]);

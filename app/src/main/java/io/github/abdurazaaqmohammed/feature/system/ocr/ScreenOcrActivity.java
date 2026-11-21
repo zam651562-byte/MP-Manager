@@ -1,4 +1,5 @@
 package io.github.abdurazaaqmohammed.feature.system.ocr;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import android.Manifest;
 import android.content.ActivityNotFoundException;
@@ -104,7 +105,7 @@ public final class ScreenOcrActivity extends BaseActivity {
             new ActivityResultContracts.StartActivityForResult(), result -> {
                 projectionRequested = false;
                 if (result.getResultCode() != RESULT_OK || result.getData() == null) {
-                    Toast.makeText(this, R.string.ocr_capture_cancelled, Toast.LENGTH_SHORT).show();
+                    ToastEngine.makeText(this, R.string.ocr_capture_cancelled, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 try {
@@ -115,7 +116,7 @@ public final class ScreenOcrActivity extends BaseActivity {
                     // Let the user choose any app; recognition waits for their bubble tap.
                     startActivity(new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME));
                 } catch (Exception error) {
-                    Toast.makeText(this, getString(R.string.ocr_capture_start_failed, error.getMessage()), Toast.LENGTH_LONG).show();
+                    ToastEngine.makeText(this, getString(R.string.ocr_capture_start_failed, error.getMessage()), Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -338,7 +339,7 @@ public final class ScreenOcrActivity extends BaseActivity {
             } catch (Exception | OutOfMemoryError error) {
                 runOnUiThread(() -> {
                     loadingImage = false;
-                    if (!isFinishing() && !isDestroyed()) Toast.makeText(this,
+                    if (!isFinishing() && !isDestroyed()) ToastEngine.makeText(this,
                             getString(R.string.ocr_image_error, error.getMessage()), Toast.LENGTH_LONG).show();
                 });
             }
@@ -501,7 +502,7 @@ public final class ScreenOcrActivity extends BaseActivity {
             clip.getDescription().setExtras(sensitive);
         }
         ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).setPrimaryClip(clip);
-        if (Build.VERSION.SDK_INT < 33) Toast.makeText(this, R.string.copied, Toast.LENGTH_SHORT).show();
+        if (Build.VERSION.SDK_INT < 33) ToastEngine.makeText(this, R.string.copied, Toast.LENGTH_SHORT).show();
     }
 
     private void shareText() {
@@ -540,7 +541,7 @@ public final class ScreenOcrActivity extends BaseActivity {
         chip.setOnClickListener(v -> {
             try { startActivity(intent); }
             catch (ActivityNotFoundException ignored) {
-                Toast.makeText(this, R.string.ocr_no_action_app, Toast.LENGTH_SHORT).show();
+                ToastEngine.makeText(this, R.string.ocr_no_action_app, Toast.LENGTH_SHORT).show();
             }
         });
         smartActions.addView(chip);

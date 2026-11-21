@@ -35,6 +35,7 @@
 
 
 package modder.hub.dexeditor.views;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import android.app.Activity;
 import android.net.*;
@@ -990,7 +991,7 @@ public class TextActionWindow extends EditorTextActionWindow implements View.OnL
 			intent.setData(Uri.parse(normalizedUrl));
 			context.startActivity(intent);
 		} catch (Exception e) {
-			Toast.makeText(context, "No browser available", Toast.LENGTH_SHORT).show();
+			ToastEngine.makeText(context, "No browser available", Toast.LENGTH_SHORT).show();
 		}
 	}
 	

@@ -1,4 +1,5 @@
 package io.github.abdurazaaqmohammed.feature.ftp;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import io.github.abdurazaaqmohammed.ui.main.ProfileAdapter;
 import android.content.DialogInterface;
@@ -162,7 +163,7 @@ public class ProfileHelper {
                 menu.setOnMenuItemClickListener(item -> {
                     if (pinnedNow) SidebarPins.remove(context, pin);
                     else SidebarPins.add(context, pin);
-                    Toast.makeText(context, item.getTitle(), Toast.LENGTH_SHORT).show();
+                    ToastEngine.makeText(context, item.getTitle(), Toast.LENGTH_SHORT).show();
                     MainActivity main =
                             MainActivity.current();
                     if (main != null && !main.isFinishing()) main.refreshSidebar(main.getSidebarSectionOrder());

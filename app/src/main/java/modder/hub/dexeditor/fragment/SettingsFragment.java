@@ -35,6 +35,7 @@
 
 
 package modder.hub.dexeditor.fragment;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import android.app.Activity;
 import android.content.Context;
@@ -143,7 +144,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private boolean validateAndSetApiKey(Preference preference, String apiKey) {
 		apiKey = apiKey.trim();
 		if (apiKey.isEmpty()) {
-			Toast.makeText(getActivity(), "Input key", Toast.LENGTH_SHORT).show();
+			ToastEngine.makeText(getActivity(), "Input key", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 		preference.setSummary(formatApiKeySummary(apiKey));
@@ -160,23 +161,23 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			startActivity(new Intent(Intent.ACTION_VIEW, 
 			Uri.parse("https://aistudio.google.com/app/u/0/apikey")));
 		} catch (Exception e) {
-			Toast.makeText(getActivity(), "No browser found", Toast.LENGTH_SHORT).show();
+			ToastEngine.makeText(getActivity(), "No browser found", Toast.LENGTH_SHORT).show();
 		}
 	}
 	private void refreshGeminiModels() {
 		Context ctx = getActivity();
 		if (ctx == null) return;
 		if (getChatGptApiKey(ctx).trim().isEmpty()) {
-			Toast.makeText(getActivity(), "Set API key first", Toast.LENGTH_SHORT).show();
+			ToastEngine.makeText(getActivity(), "Set API key first", Toast.LENGTH_SHORT).show();
 			return;
 		}
-		Toast.makeText(getActivity(), "Fetching models", Toast.LENGTH_SHORT).show();
+		ToastEngine.makeText(getActivity(), "Fetching models", Toast.LENGTH_SHORT).show();
 		fetchGeminiModels(ctx, models -> {
 			Activity a = getActivity();
 			if (a == null) return;
 			a.runOnUiThread(() -> {
 				if (models.isEmpty()) {
-					Toast.makeText(a, "No Gemini models found", Toast.LENGTH_SHORT).show();
+					ToastEngine.makeText(a, "No Gemini models found", Toast.LENGTH_SHORT).show();
 					return;
 				}
 				ListPreference modelPref = findPreference(KEY_GEMINI_MODEL);
@@ -188,7 +189,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 					if (!models.contains(cur)) modelPref.setValue(models.get(0));
 					updateSummary(modelPref);
 				}
-				Toast.makeText(a, models.size() + " models loaded", Toast.LENGTH_SHORT).show();
+				ToastEngine.makeText(a, models.size() + " models loaded", Toast.LENGTH_SHORT).show();
 			});
 		});
 	}

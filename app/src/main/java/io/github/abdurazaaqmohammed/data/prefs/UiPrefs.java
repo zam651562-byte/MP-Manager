@@ -305,4 +305,52 @@ public final class UiPrefs {
             return FOLDER_SIZE_USER;
         }
     }
+
+    public static int dialogWidth(Context context) {
+        return getBoundedPreference(context, "mp_dialog_width_dp", 520, 280, 720);
+    }
+
+    public static int dialogAlpha(Context context) {
+        return getBoundedPreference(context, "mp_dialog_alpha", 100, 40, 100);
+    }
+
+    public static int dialogDimAlpha(Context context) {
+        return getBoundedPreference(context, "mp_dialog_dim_alpha", 55, 0, 100);
+    }
+
+    public static int dialogCornerRadius(Context context) {
+        return getBoundedPreference(context, "mp_dialog_corner_radius", 18, 0, 32);
+    }
+
+    public static int toastAlpha(Context context) {
+        return getBoundedPreference(context, "mp_toast_alpha", 96, 20, 100);
+    }
+
+    public static int toastCornerRadius(Context context) {
+        return getBoundedPreference(context, "mp_toast_corner_radius", 16, 0, 32);
+    }
+
+    private static int getBoundedPreference(Context context, String key, int fallback, int min, int max) {
+        try {
+            int value = PreferenceManager.getDefaultSharedPreferences(context).getInt(key, fallback);
+            return Math.max(min, Math.min(max, value));
+        } catch (Exception ignored) {
+            return fallback;
+        }
+    }
+
+    public static void saveDialogToastPreference(Context context, String key, int value) {
+        try {
+            PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(key, value).apply();
+        } catch (Exception ignored) {
+        }
+    }
+
+    public static void saveDialogDragEnabled(Context context, boolean enabled) {
+        try {
+            PreferenceManager.getDefaultSharedPreferences(context)
+                    .edit().putBoolean("mp_dialog_drag_enabled", enabled).apply();
+        } catch (Exception ignored) {
+        }
+    }
 }

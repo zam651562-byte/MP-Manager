@@ -1,4 +1,5 @@
 package modder.hub.dexeditor.activity;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import android.content.Context;
 import android.content.Intent;
@@ -1237,16 +1238,16 @@ public class TranslationModeActivity extends BaseActivity {
     }
 
     private void toast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        ToastEngine.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
     private void toast(int res) {
-        Toast.makeText(this, res, Toast.LENGTH_SHORT).show();
+        ToastEngine.makeText(this, res, Toast.LENGTH_SHORT).show();
     }
 
     @SuppressWarnings("SameParameterValue")
     private void showError(String message) {
-        Toast.makeText(this, message == null ? "Error" : message, Toast.LENGTH_LONG).show();
+        ToastEngine.makeText(this, message == null ? "Error" : message, Toast.LENGTH_LONG).show();
     }
 
     private int themeColor(int attr, int fallback) {

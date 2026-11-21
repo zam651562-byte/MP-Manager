@@ -1,4 +1,5 @@
 package io.github.abdurazaaqmohammed.feature.freestyle;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import android.Manifest;
 import android.content.ContentUris;
@@ -103,7 +104,7 @@ public class FreeStylePickerActivity extends AppCompatActivity {
 
         btnNext.setOnClickListener(v -> {
             if (selectedPaths.isEmpty()) {
-                Toast.makeText(this, R.string.select_images, Toast.LENGTH_SHORT).show();
+                ToastEngine.makeText(this, R.string.select_images, Toast.LENGTH_SHORT).show();
                 return;
             }
             Intent intent = new Intent(this, FreeStyleCanvasActivity.class);
@@ -158,7 +159,7 @@ public class FreeStylePickerActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 loadDeviceImages();
             } else {
-                Toast.makeText(this, "Permission required to display gallery photos", Toast.LENGTH_SHORT).show();
+                ToastEngine.makeText(this, "Permission required to display gallery photos", Toast.LENGTH_SHORT).show();
                 loadDeviceImages(); // Attempt anyway in case broad access is given
             }
         }

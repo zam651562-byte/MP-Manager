@@ -34,6 +34,7 @@
 */
 
 package modder.hub.dexeditor.views;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import android.animation.LayoutTransition;
 import android.content.Context;
@@ -135,7 +136,7 @@ public class CustomCompletionLayout implements CompletionLayout {
                 editorAutoCompletion.select(position);
             } catch (Exception e) {
                 e.printStackTrace(System.err);
-                Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+                ToastEngine.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
             }
         });
 		

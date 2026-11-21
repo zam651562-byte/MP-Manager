@@ -1,4 +1,5 @@
 package io.github.abdurazaaqmohammed.feature.system;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -26,12 +27,12 @@ public final class ToolShortcuts {
 
     private static void pin(Activity activity, String id, String title, String subtitle, int icon) {
         if (Build.VERSION.SDK_INT < 26) {
-            Toast.makeText(activity, R.string.plugin_shortcut_old_android, Toast.LENGTH_SHORT).show();
+            ToastEngine.makeText(activity, R.string.plugin_shortcut_old_android, Toast.LENGTH_SHORT).show();
             return;
         }
         ShortcutManager manager = activity.getSystemService(ShortcutManager.class);
         if (manager == null || !manager.isRequestPinShortcutSupported()) {
-            Toast.makeText(activity, R.string.plugin_shortcut_unsupported, Toast.LENGTH_SHORT).show();
+            ToastEngine.makeText(activity, R.string.plugin_shortcut_unsupported, Toast.LENGTH_SHORT).show();
             return;
         }
         try {
@@ -41,10 +42,10 @@ public final class ToolShortcuts {
                     .setShortLabel(title).setLongLabel(title + " — " + subtitle)
                     .setIcon(Icon.createWithResource(activity, icon)).setIntent(intent).build();
             boolean requested = manager.requestPinShortcut(shortcut, null);
-            Toast.makeText(activity, requested ? R.string.plugin_shortcut_done
+            ToastEngine.makeText(activity, requested ? R.string.plugin_shortcut_done
                     : R.string.plugin_shortcut_unsupported, Toast.LENGTH_SHORT).show();
         } catch (Exception error) {
-            Toast.makeText(activity, R.string.plugin_shortcut_unsupported, Toast.LENGTH_LONG).show();
+            ToastEngine.makeText(activity, R.string.plugin_shortcut_unsupported, Toast.LENGTH_LONG).show();
         }
     }
 }

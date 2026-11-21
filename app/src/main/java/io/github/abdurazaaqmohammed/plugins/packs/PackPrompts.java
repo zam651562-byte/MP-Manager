@@ -1,4 +1,5 @@
 package io.github.abdurazaaqmohammed.plugins.packs;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import android.R;
 import android.app.Activity;
@@ -116,19 +117,19 @@ public final class PackPrompts {
 
     private static void startDownload(Activity activity, PackDescriptor pack, Runnable onInstalled, View action) {
         if (!pack.supportsDevice()) {
-            Toast.makeText(activity, activity.getString(
+            ToastEngine.makeText(activity, activity.getString(
                     io.github.abdurazaaqmohammed.MPManager.R.string.tools_hub_min_sdk, pack.minSdk()), Toast.LENGTH_LONG).show();
             return;
         }
         if (!pack.hasChecksum()) {
-            Toast.makeText(activity, "Pack has no published checksum; refresh the catalog or install a local test APK.",
+            ToastEngine.makeText(activity, "Pack has no published checksum; refresh the catalog or install a local test APK.",
                     Toast.LENGTH_LONG).show();
             if (action != null) action.setEnabled(true);
             return;
         }
         synchronized (PackPrompts.class) {
             if (!DOWNLOADING.add(pack.id)) {
-                Toast.makeText(activity, "This pack is already downloading", Toast.LENGTH_SHORT).show();
+                ToastEngine.makeText(activity, "This pack is already downloading", Toast.LENGTH_SHORT).show();
                 return;
             }
         }
@@ -138,11 +139,11 @@ public final class PackPrompts {
         long downloadId = PackManager.enqueueDownload(activity, pack);
         if (downloadId < 0) {
             synchronized (PackPrompts.class) { DOWNLOADING.remove(pack.id); }
-            Toast.makeText(activity, "Download URL is missing", Toast.LENGTH_SHORT).show();
+            ToastEngine.makeText(activity, "Download URL is missing", Toast.LENGTH_SHORT).show();
             if (action != null) action.setEnabled(true);
             return;
         }
-        Toast.makeText(activity, "Downloading " + pack.title + "\u2026", Toast.LENGTH_SHORT).show();
+        ToastEngine.makeText(activity, "Downloading " + pack.title + "\u2026", Toast.LENGTH_SHORT).show();
         BroadcastReceiver receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -163,7 +164,7 @@ public final class PackPrompts {
                 }
                 if (!ok) {
                     synchronized (PackPrompts.class) { DOWNLOADING.remove(pack.id); }
-                    Toast.makeText(appContext, "Download failed", Toast.LENGTH_SHORT).show();
+                    ToastEngine.makeText(appContext, "Download failed", Toast.LENGTH_SHORT).show();
                     View button = actionView.get();
                     if (button != null) button.setEnabled(true);
                     return;
@@ -174,11 +175,11 @@ public final class PackPrompts {
                     synchronized (PackPrompts.class) { DOWNLOADING.remove(pack.id); }
                     new Handler(Looper.getMainLooper()).post(() -> {
                         if (error == null) {
-                            Toast.makeText(appContext, pack.title + " installed", Toast.LENGTH_SHORT).show();
+                            ToastEngine.makeText(appContext, pack.title + " installed", Toast.LENGTH_SHORT).show();
                             Activity live = owner.get();
                             if (live != null && !live.isFinishing() && !live.isDestroyed() && onInstalled != null) onInstalled.run();
                         } else {
-                            Toast.makeText(appContext, error, Toast.LENGTH_LONG).show();
+                            ToastEngine.makeText(appContext, error, Toast.LENGTH_LONG).show();
                             View button = actionView.get();
                             if (button != null) button.setEnabled(true);
                         }
@@ -204,7 +205,7 @@ public final class PackPrompts {
             synchronized (PackPrompts.class) { DOWNLOADING.remove(pack.id); }
             DownloadManager manager = (DownloadManager) appContext.getSystemService(Context.DOWNLOAD_SERVICE);
             if (manager != null) manager.remove(downloadId);
-            Toast.makeText(appContext, "Could not start pack download", Toast.LENGTH_LONG).show();
+            ToastEngine.makeText(appContext, "Could not start pack download", Toast.LENGTH_LONG).show();
             if (action != null) action.setEnabled(true);
         }
     }

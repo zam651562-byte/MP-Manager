@@ -1,4 +1,5 @@
 package io.github.abdurazaaqmohammed.feature.system;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import android.annotation.SuppressLint;
 import android.content.ComponentName;
@@ -49,9 +50,9 @@ public class PrivateDnsTileService extends TileService {
             final DnsManager.DnsProfile result = applied;
             new Handler(Looper.getMainLooper()).post(() -> {
                 if (result != null) {
-                    Toast.makeText(this, getString(R.string.dns_applied, result.name), Toast.LENGTH_SHORT).show();
+                    ToastEngine.makeText(this, getString(R.string.dns_applied, result.name), Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(this, getString(R.string.dns_switch_failed), Toast.LENGTH_SHORT).show();
+                    ToastEngine.makeText(this, getString(R.string.dns_switch_failed), Toast.LENGTH_SHORT).show();
                 }
                 refresh();
             });

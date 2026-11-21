@@ -1,4 +1,5 @@
 package io.github.abdurazaaqmohammed.mcp;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -90,7 +91,7 @@ public class McpServerService extends Service {
         if (previous != null) previous.stop();
         File home = McpPrefs.getHome(this);
         if (!home.isDirectory() && !home.mkdirs() && !home.isDirectory()) {
-            Toast.makeText(this,
+            ToastEngine.makeText(this,
                     getString(R.string.mcp_home_create_failed, home.getPath()), Toast.LENGTH_LONG).show();
         }
         McpPathPolicy policy = new McpPathPolicy(home, McpPrefs.getRulesJson(this));
@@ -110,7 +111,7 @@ public class McpServerService extends Service {
         try {
             httpServer.start();
         } catch (Exception e) {
-            Toast.makeText(this,
+            ToastEngine.makeText(this,
                     getString(R.string.mcp_start_failed, String.valueOf(e.getMessage())), Toast.LENGTH_LONG).show();
             stopSelf();
             return;

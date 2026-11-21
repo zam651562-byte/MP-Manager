@@ -15,6 +15,7 @@
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 package io.github.ratul.topactivity;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import android.app.Activity;
 import android.app.Application;
@@ -143,7 +144,7 @@ public class App extends Application {
         try {
             Extensions.showMessage((Activity) context, message);
         } catch (Exception ignored) {
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+            ToastEngine.makeText(context, message, Toast.LENGTH_SHORT).show();
         }
     }
 }

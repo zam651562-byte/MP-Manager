@@ -1,4 +1,5 @@
 package io.github.abdurazaaqmohammed.feature.system;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -203,7 +204,7 @@ public class SetEditActivity extends BaseActivity {
         String msg = added
                 ? (isAr() ? "تمت الإضافة للمفضلة ❤️" : "Added to favorites ❤️")
                 : (isAr() ? "تمت الإزالة من المفضلة" : "Removed from favorites");
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        ToastEngine.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
     private void initViews() {
@@ -556,11 +557,11 @@ public class SetEditActivity extends BaseActivity {
 
         TextView btnCopyKey = createActionPill("📋 " + (isAr() ? "نسخ المفتاح" : "Copy Key"), primaryColor, () -> {
             copyToClipboard(entry.key);
-            Toast.makeText(this, R.string.copied, Toast.LENGTH_SHORT).show();
+            ToastEngine.makeText(this, R.string.copied, Toast.LENGTH_SHORT).show();
         });
         TextView btnCopyVal = createActionPill("📋 " + (isAr() ? "نسخ القيمة" : "Copy Value"), primaryColor, () -> {
             copyToClipboard(entry.value);
-            Toast.makeText(this, R.string.copied, Toast.LENGTH_SHORT).show();
+            ToastEngine.makeText(this, R.string.copied, Toast.LENGTH_SHORT).show();
         });
 
         actions.addView(btnCopyKey);
@@ -696,7 +697,7 @@ public class SetEditActivity extends BaseActivity {
             String key = etKey.getText().toString().trim();
             String val = etVal.getText().toString();
             if (key.isEmpty()) {
-                Toast.makeText(this, isAr() ? "المفتاح لا يمكن أن يكون فارغاً" : "Key cannot be empty", Toast.LENGTH_SHORT).show();
+                ToastEngine.makeText(this, isAr() ? "المفتاح لا يمكن أن يكون فارغاً" : "Key cannot be empty", Toast.LENGTH_SHORT).show();
                 return;
             }
             int pos = spType.getSelectedItemPosition();
@@ -752,14 +753,14 @@ public class SetEditActivity extends BaseActivity {
                 updateCounts();
                 progressBar.setVisibility(View.GONE);
                 applyFilter();
-                Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
+                ToastEngine.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
             });
         }).start();
     }
 
     private void deleteSetting(SettingEntry entry) {
         if (entry.type == SettingType.PROP) {
-            Toast.makeText(this, isAr() ? "لا يمكن حذف خصائص النظام" : "System properties cannot be deleted", Toast.LENGTH_SHORT).show();
+            ToastEngine.makeText(this, isAr() ? "لا يمكن حذف خصائص النظام" : "System properties cannot be deleted", Toast.LENGTH_SHORT).show();
             return;
         }
         progressBar.setVisibility(View.VISIBLE);
@@ -773,7 +774,7 @@ public class SetEditActivity extends BaseActivity {
                 updateCounts();
                 progressBar.setVisibility(View.GONE);
                 applyFilter();
-                Toast.makeText(this, isAr() ? "تم الحذف بنجاح" : "Deleted successfully", Toast.LENGTH_SHORT).show();
+                ToastEngine.makeText(this, isAr() ? "تم الحذف بنجاح" : "Deleted successfully", Toast.LENGTH_SHORT).show();
             });
         }).start();
     }

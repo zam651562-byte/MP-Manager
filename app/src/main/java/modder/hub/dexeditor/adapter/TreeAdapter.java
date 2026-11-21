@@ -30,6 +30,7 @@
  */
 
 package modder.hub.dexeditor.adapter;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -1008,7 +1009,7 @@ public class TreeAdapter extends RecyclerView.Adapter<TreeAdapter.ViewHolder> {
                     }
                     break;
                 default:
-                    Toast.makeText(context, title + " not implemented yet", Toast.LENGTH_SHORT).show();
+                    ToastEngine.makeText(context, title + " not implemented yet", Toast.LENGTH_SHORT).show();
                     break;
             }
             return true;

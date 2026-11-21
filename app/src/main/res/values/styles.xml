@@ -68,6 +68,16 @@
     <style name="AppCompat.Dialog" parent="@style/ThemeOverlay.Material3.Dialog.Alert">
         <item name="android:windowTitleStyle">@style/RtlOverlay.DialogWindowTitle.AppCompat</item>
         <item name="buttonBarButtonStyle">@style/Widget.Material3.Button.TextButton.Dialog.Flush</item>
+        <item name="android:windowAnimationStyle">@style/MpDialogAnimations</item>
+        <item name="android:windowMinWidthMajor">88%</item>
+        <item name="android:windowMinWidthMinor">88%</item>
+        <item name="android:backgroundDimAmount">0.55</item>
+        <item name="android:windowElevation">8dp</item>
+    </style>
+
+    <style name="MpDialogAnimations">
+        <item name="android:windowEnterAnimation">@anim/mp_dialog_enter</item>
+        <item name="android:windowExitAnimation">@anim/mp_dialog_exit</item>
     </style>
 
     <style name="HexCell">

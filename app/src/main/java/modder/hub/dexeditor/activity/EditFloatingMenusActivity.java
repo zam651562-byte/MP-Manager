@@ -35,6 +35,7 @@
 
 
 package modder.hub.dexeditor.activity;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -101,7 +102,7 @@ public class EditFloatingMenusActivity extends BaseActivity implements StartDrag
 
     private void initializeLogic() {
         setTitle(getString(R.string.edit_floating_menus));
-        Toast.makeText(this, R.string.menu_seq, Toast.LENGTH_LONG).show();
+        ToastEngine.makeText(this, R.string.menu_seq, Toast.LENGTH_LONG).show();
         _load_shortcut_keys();
     }
 

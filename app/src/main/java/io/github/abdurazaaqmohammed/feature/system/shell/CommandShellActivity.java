@@ -1,4 +1,5 @@
 package io.github.abdurazaaqmohammed.feature.system.shell;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import io.github.abdurazaaqmohammed.privilege.api.ShellSession;
 
@@ -383,10 +384,10 @@ public class CommandShellActivity extends BaseActivity {
     private void toggleBookmark(String cmd) {
         if (bookmarkSet.contains(cmd)) {
             bookmarkSet.remove(cmd);
-            Toast.makeText(this, getString(R.string.bookmark_removed_message, cmd), Toast.LENGTH_SHORT).show();
+            ToastEngine.makeText(this, getString(R.string.bookmark_removed_message, cmd), Toast.LENGTH_SHORT).show();
         } else {
             bookmarkSet.add(cmd);
-            Toast.makeText(this, getString(R.string.bookmark_added_message, cmd), Toast.LENGTH_SHORT).show();
+            ToastEngine.makeText(this, getString(R.string.bookmark_added_message, cmd), Toast.LENGTH_SHORT).show();
         }
         saveBookmarks();
         updateCommandBoxState(commandEdit.getText() != null ? commandEdit.getText().toString() : "");
@@ -419,7 +420,7 @@ public class CommandShellActivity extends BaseActivity {
         ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         if (cm != null) {
             cm.setPrimaryClip(ClipData.newPlainText("Shell Output", sb.toString()));
-            Toast.makeText(this, R.string.copied, Toast.LENGTH_SHORT).show();
+            ToastEngine.makeText(this, R.string.copied, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -658,9 +659,9 @@ public class CommandShellActivity extends BaseActivity {
                     fos.write((line + "\n").getBytes());
                 }
             }
-            Toast.makeText(this, "Saved to " + logFile.getAbsolutePath(), Toast.LENGTH_LONG).show();
+            ToastEngine.makeText(this, "Saved to " + logFile.getAbsolutePath(), Toast.LENGTH_LONG).show();
         } catch (Exception e) {
-            Toast.makeText(this, "Failed to save: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            ToastEngine.makeText(this, "Failed to save: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -869,7 +870,7 @@ public class CommandShellActivity extends BaseActivity {
                     })
                     .show();
         } else {
-            Toast.makeText(this, file.getName(), Toast.LENGTH_SHORT).show();
+            ToastEngine.makeText(this, file.getName(), Toast.LENGTH_SHORT).show();
         }
     }
 

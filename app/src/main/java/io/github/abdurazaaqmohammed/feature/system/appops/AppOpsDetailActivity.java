@@ -1,4 +1,5 @@
 package io.github.abdurazaaqmohammed.feature.system.appops;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -107,7 +108,7 @@ public class AppOpsDetailActivity extends BaseActivity {
         ImageView btnRefresh = findViewById(R.id.detail_btn_refresh);
         if (btnRefresh != null) {
             btnRefresh.setOnClickListener(v -> {
-                Toast.makeText(this, R.string.app_ops_refreshing, Toast.LENGTH_SHORT).show();
+                ToastEngine.makeText(this, R.string.app_ops_refreshing, Toast.LENGTH_SHORT).show();
                 loadData();
             });
         }
@@ -191,7 +192,7 @@ public class AppOpsDetailActivity extends BaseActivity {
                 boolean ok = AppOpsEngine.setIgnoreBatteryOptimization(this, packageName, isChecked);
                 mainHandler.post(() -> {
                     if (ok) {
-                        Toast.makeText(this, getString(isChecked
+                        ToastEngine.makeText(this, getString(isChecked
                                 ? R.string.app_ops_toast_battery_whitelisted
                                 : R.string.app_ops_toast_battery_optimized), Toast.LENGTH_SHORT).show();
                     } else {
@@ -208,7 +209,7 @@ public class AppOpsDetailActivity extends BaseActivity {
                 boolean ok = AppOpsEngine.setNetworkBlocked(this, data.uid, isChecked);
                 mainHandler.post(() -> {
                     if (ok) {
-                        Toast.makeText(this, getString(isChecked
+                        ToastEngine.makeText(this, getString(isChecked
                                 ? R.string.app_ops_toast_net_blocked
                                 : R.string.app_ops_toast_net_unblocked), Toast.LENGTH_SHORT).show();
                     } else {
@@ -222,7 +223,7 @@ public class AppOpsDetailActivity extends BaseActivity {
             CommandOutcome ok = runChecked(() -> AppOpsEngine.forceStopApp(this, packageName));
             mainHandler.post(() -> {
                 if (ok.success) {
-                    Toast.makeText(this, R.string.app_ops_toast_force_stopped, Toast.LENGTH_SHORT).show();
+                    ToastEngine.makeText(this, R.string.app_ops_toast_force_stopped, Toast.LENGTH_SHORT).show();
                 } else {
                     toastFailure(ok);
                 }
@@ -238,7 +239,7 @@ public class AppOpsDetailActivity extends BaseActivity {
                 if (ok.success) AppOpsCache.invalidateAppList();
                 mainHandler.post(() -> {
                     if (ok.success) {
-                        Toast.makeText(this, getString(suspend
+                        ToastEngine.makeText(this, getString(suspend
                                 ? R.string.app_ops_toast_suspended
                                 : R.string.app_ops_toast_unsuspended), Toast.LENGTH_SHORT).show();
                         loadData();
@@ -271,7 +272,7 @@ public class AppOpsDetailActivity extends BaseActivity {
                     if (ok.success) AppOpsCache.invalidateAppList();
                     mainHandler.post(() -> {
                         if (ok.success) {
-                            Toast.makeText(this, R.string.app_ops_toast_data_cleared, Toast.LENGTH_SHORT).show();
+                            ToastEngine.makeText(this, R.string.app_ops_toast_data_cleared, Toast.LENGTH_SHORT).show();
                             loadData();
                         } else {
                             toastFailure(ok);
@@ -289,7 +290,7 @@ public class AppOpsDetailActivity extends BaseActivity {
                     if (ok.success) AppOpsCache.invalidateAppList();
                     mainHandler.post(() -> {
                         if (ok.success) {
-                            Toast.makeText(this, R.string.app_ops_toast_uninstalled, Toast.LENGTH_SHORT).show();
+                            ToastEngine.makeText(this, R.string.app_ops_toast_uninstalled, Toast.LENGTH_SHORT).show();
                             finish();
                         } else {
                             toastFailure(ok);
@@ -306,7 +307,7 @@ public class AppOpsDetailActivity extends BaseActivity {
             if (ok.success) AppOpsCache.invalidateAppList();
             mainHandler.post(() -> {
                 if (ok.success) {
-                    Toast.makeText(this, getString(enable
+                    ToastEngine.makeText(this, getString(enable
                             ? R.string.app_ops_toast_enabled
                             : R.string.app_ops_toast_disabled), Toast.LENGTH_SHORT).show();
                     loadData();
@@ -344,7 +345,7 @@ public class AppOpsDetailActivity extends BaseActivity {
 
     private void toastFailure(CommandOutcome outcome) {
         String detail = TextUtils.isEmpty(outcome.error) ? getString(R.string.app_ops_unknown) : outcome.error;
-        Toast.makeText(this, getString(R.string.app_ops_action_failed, detail), Toast.LENGTH_LONG).show();
+        ToastEngine.makeText(this, getString(R.string.app_ops_action_failed, detail), Toast.LENGTH_LONG).show();
     }
 
     /** Puts a switch back where it was after its action failed. */
@@ -552,7 +553,7 @@ public class AppOpsDetailActivity extends BaseActivity {
                                 AppOpsEngine.setAppOpMode(this, packageName, p.opName, newMode, true));
                         mainHandler.post(() -> {
                             if (ok.success) {
-                                Toast.makeText(this, getString(R.string.app_ops_toast_mode_set, p.label, newMode), Toast.LENGTH_SHORT).show();
+                                ToastEngine.makeText(this, getString(R.string.app_ops_toast_mode_set, p.label, newMode), Toast.LENGTH_SHORT).show();
                                 loadData();
                             } else {
                                 toastFailure(ok);

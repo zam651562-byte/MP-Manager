@@ -1,4 +1,5 @@
 package io.github.abdurazaaqmohammed.feature.system;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -19,7 +20,7 @@ public final class ToolShortcutActivity extends Activity {
         super.onCreate(state);
         String id = getIntent().getStringExtra(ToolShortcuts.EXTRA_TOOL_ID);
         if (ToolRegistry.findById(this, id) != null && !ToolRegistry.isAvailable(this, id)) {
-            Toast.makeText(this, R.string.tool_requires_root,
+            ToastEngine.makeText(this, R.string.tool_requires_root,
                     Toast.LENGTH_LONG).show();
             finish();
             return;

@@ -1,4 +1,5 @@
 package io.github.abdurazaaqmohammed.util.io;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -25,7 +26,7 @@ public class CopyUtil {
             copyToClipboard(activity, text);
         } else {
             ((ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE)).setText(text);
-            android.widget.Toast.makeText(context, context.getString(R.string.copied_to_clipboard, text), android.widget.Toast.LENGTH_SHORT).show();
+            ToastEngine.makeText(context, context.getString(R.string.copied_to_clipboard, text), android.widget.Toast.LENGTH_SHORT).show();
         }
     }
 }

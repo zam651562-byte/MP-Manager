@@ -1,4 +1,5 @@
 package io.github.abdurazaaqmohammed.feature.sqlite;
+import io.github.abdurazaaqmohammed.ui.common.util.ToastEngine;
 
 import io.github.abdurazaaqmohammed.privilege.api.PrivilegeManager;
 
@@ -91,7 +92,7 @@ public class SqliteViewerActivity extends BaseActivity {
         if (TextUtils.isEmpty(originalPath)) originalPath = dbPath;
 
         if (TextUtils.isEmpty(dbPath) || !new File(dbPath).exists()) {
-            Toast.makeText(this, "Database file not found: " + dbPath, Toast.LENGTH_SHORT).show();
+            ToastEngine.makeText(this, "Database file not found: " + dbPath, Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -312,7 +313,7 @@ public class SqliteViewerActivity extends BaseActivity {
             } catch (Exception e) {
                 runOnUiThread(() -> {
                     progressBar.setVisibility(View.GONE);
-                    Toast.makeText(SqliteViewerActivity.this, "Query error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    ToastEngine.makeText(SqliteViewerActivity.this, "Query error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
             }
         }).start();
@@ -443,12 +444,12 @@ public class SqliteViewerActivity extends BaseActivity {
                 if (affected > 0) {
                     markModifiedAndSync();
                     runOnUiThread(() -> {
-                        Toast.makeText(this, "Updated successfully", Toast.LENGTH_SHORT).show();
+                        ToastEngine.makeText(this, "Updated successfully", Toast.LENGTH_SHORT).show();
                         loadTableData();
                     });
                 }
             } catch (Exception e) {
-                runOnUiThread(() -> Toast.makeText(this, "Update failed: " + e.getMessage(), Toast.LENGTH_LONG).show());
+                runOnUiThread(() -> ToastEngine.makeText(this, "Update failed: " + e.getMessage(), Toast.LENGTH_LONG).show());
             }
         }).start();
     }
@@ -480,12 +481,12 @@ public class SqliteViewerActivity extends BaseActivity {
                             if (deleted > 0) {
                                 markModifiedAndSync();
                                 runOnUiThread(() -> {
-                                    Toast.makeText(this, "Row deleted", Toast.LENGTH_SHORT).show();
+                                    ToastEngine.makeText(this, "Row deleted", Toast.LENGTH_SHORT).show();
                                     loadTableData();
                                 });
                             }
                         } catch (Exception e) {
-                            runOnUiThread(() -> Toast.makeText(this, "Delete failed: " + e.getMessage(), Toast.LENGTH_LONG).show());
+                            runOnUiThread(() -> ToastEngine.makeText(this, "Delete failed: " + e.getMessage(), Toast.LENGTH_LONG).show());
                         }
                     }).start();
                 })
@@ -555,13 +556,13 @@ public class SqliteViewerActivity extends BaseActivity {
                     runOnUiThread(() -> {
                         // Display results or reload
                         loadTableData();
-                        Toast.makeText(this, "Query executed", Toast.LENGTH_SHORT).show();
+                        ToastEngine.makeText(this, "Query executed", Toast.LENGTH_SHORT).show();
                     });
                 } else {
                     db.execSQL(query);
                     markModifiedAndSync();
                     runOnUiThread(() -> {
-                        Toast.makeText(this, "SQL executed successfully", Toast.LENGTH_SHORT).show();
+                        ToastEngine.makeText(this, "SQL executed successfully", Toast.LENGTH_SHORT).show();
                         loadTableData();
                     });
                 }
@@ -591,7 +592,7 @@ public class SqliteViewerActivity extends BaseActivity {
         ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         if (cm != null) {
             cm.setPrimaryClip(ClipData.newPlainText("SQL Data", text));
-            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+            ToastEngine.makeText(this, msg, Toast.LENGTH_SHORT).show();
         }
     }
 
