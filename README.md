@@ -1,57 +1,259 @@
-# <img src="./app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="48"> MP Manager
+MP MANAGER™
 
-A free dual pane, Material Design file manager for Android with focus on APKs and the goal to be an open source alternative to MT Manager
+ПРОФЕССИОНАЛЬНЫЙ ДВУХПАНЕЛЬНЫЙ ФАЙЛОВЫЙ МЕНЕДЖЕР ДЛЯ ANDROID
+
+MP Manager — бесплатный файловый менеджер с открытым исходным кодом, построенный на основе Material Design и ориентированный на профессиональную работу с файлами, Android-приложениями, APK, DEX, ресурсами и системными компонентами.
+
+Проект создаётся как полноценная открытая альтернатива MT Manager, объединяющая мощные инструменты управления файлами, анализа приложений, редактирования кода, сетевых операций и системного обслуживания Android.
 
 <p align="center">
-  <img src="./images/Ss1.png" width="200" alt="MP Manager screenshot"> <img src="./images/Ss2.png" width="200" alt="MP Manager screenshot">
+  <img src="./app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="64" alt="MP Manager">
+</p><p align="center">
+  <img src="./images/Ss1.png" width="200" alt="MP Manager Screenshot">
+  <img src="./images/Ss2.png" width="200" alt="MP Manager Screenshot">
+</p>---
+
+01. ОРИГИНАЛЬНЫЙ ИСХОДНЫЙ ПРОЕКТ
+
+Официальный репозиторий MP Manager:
+
+https://github.com/AbdurazaaqMohammed/MP-Manager
+
+Обязательное клонирование оригинального репозитория:
+
+git clone https://github.com/AbdurazaaqMohammed/MP-Manager.git
+
+Разработка должна выполняться непосредственно на основе оригинального исходного кода MP Manager.
+
+Перед началом любых изменений необходимо:
+
+- Полностью клонировать официальный Git-репозиторий.
+- Проверить правильность Remote URL.
+- Получить актуальные исходные файлы, ветки, теги и историю Git.
+- Определить последнюю стабильную версию проекта.
+- Провести комплексное исследование структуры и архитектуры приложения.
+- Проанализировать существующие модули, классы, библиотеки, зависимости и внутренние механизмы.
+- Изучить взаимосвязи между функциональными компонентами.
+- Создать полную резервную копию исходного состояния.
+
+Основное требование: оригинальный MP Manager является единственной базой разработки.
+
+Запрещается создавать отдельное приложение вместо оригинала, переписывать проект с нуля, заменять его другой реализацией или удалять существующие функциональные возможности.
+
+02. ФАЙЛОВЫЙ МЕНЕДЖЕР — FILE MANAGER
+
+Полноценная двухпанельная система управления файлами, предназначенная для удобной и быстрой работы с локальным и сетевым хранилищем.
+
+Основные возможности:
+
+- Двухпанельная навигация.
+- Расширенный поиск файлов и каталогов.
+- Поиск содержимого внутри архивов.
+- Просмотр архивов как обычных папок.
+- Поддержка ZIP, RAR, ZST и резервных архивов.
+- Копирование, перемещение, переименование и удаление файлов.
+- Корзина для восстановления удалённых данных.
+- Вычисление контрольных сумм.
+- Управление локальными и внешними хранилищами.
+- Доступ к Root-хранилищу.
+- Поддержка Shizuku и Dhizuku.
+
+Документация: "File Manager" (https://abdurazaaqmohammed.github.io/mpmanager/file-manager.html)
+
+03. СЕТЕВАЯ СИСТЕМА — NETWORK ENGINE
+
+Встроенная система сетевого взаимодействия и управления удалёнными хранилищами.
+
+Возможности:
+
+- FTP-сервер и FTP-клиент.
+- Поддержка FTPS.
+- Подключение к WebDAV.
+- Подключение к SMB.
+- Обнаружение доступных сетевых серверов.
+- Сохранение сетевых профилей.
+- Защищённое хранение данных подключений.
+- Управление удалёнными файлами.
+- Интеграция сетевых операций с файловым менеджером.
+
+Документация: "Network" (https://abdurazaaqmohammed.github.io/mpmanager/network.html)
+
+04. МУЛЬТИМЕДИЙНАЯ СИСТЕМА — MEDIA ENGINE
+
+Встроенная мультимедийная среда для просмотра, воспроизведения и обработки файлов.
+
+Возможности:
+
+- Аудиоплеер.
+- Видеоплеер.
+- Фоновое воспроизведение.
+- Компактный мини-плеер.
+- Редактор изображений.
+- Просмотр и редактирование EXIF.
+- Free Style Collage Studio.
+- Работа с мультимедийными файлами непосредственно из файлового менеджера.
+
+Документация: "Media" (https://abdurazaaqmohammed.github.io/mpmanager/media.html)
+
+05. ИНЖЕНЕРИЯ ANDROID-ПРИЛОЖЕНИЙ — APK ENGINEERING
+
+Комплекс профессиональных инструментов для анализа, декомпиляции, модификации и сборки Android-приложений.
+
+Основные возможности:
+
+- Установка APK.
+- Подписание APK.
+- Декомпиляция приложений.
+- Повторная сборка APK.
+- Редактирование DEX.
+- Редактирование ARSC.
+- Быстрое редактирование AndroidManifest.xml.
+- Интегрированный режим LSPatch.
+- IL2CPP Dumper.
+- Jiagu Unpacker.
+- Патчинг нативных библиотек.
+- Работа с ресурсами Android-приложений.
+- Анализ структуры APK и внутренних компонентов.
+
+Документация: "APK Tools" (https://abdurazaaqmohammed.github.io/mpmanager/apk-tools.html)
+
+06. ПРОФЕССИОНАЛЬНЫЕ РЕДАКТОРЫ — EDITORS
+
+Интегрированная среда редактирования файлов и внутренних компонентов Android-приложений.
+
+Возможности:
+
+- Текстовый редактор.
+- Подсветка синтаксиса.
+- Декодирование AXML.
+- HEX-редактор.
+- Сравнение текстовых файлов.
+- Редактирование архивов.
+- Редактирование ресурсов.
+- Работа с DEX-файлами.
+- Инструменты анализа и изменения содержимого файлов.
+
+Документация: "Editors" (https://abdurazaaqmohammed.github.io/mpmanager/editors.html)
+
+07. СИСТЕМНЫЕ ИНСТРУМЕНТЫ — ADVANCED TOOLS
+
+Единая система инструментов для расширенного управления Android и анализа системных компонентов.
+
+Встроенные возможности:
+
+- Command Shell.
+- Smart App Ops.
+- SetEdit.
+- Просмотрщик и редактор SQLite.
+- Дамп системных разделов.
+- Инструменты Boot Image.
+- ELF Inspector.
+- Logcat Reader.
+- OCR.
+- Система плагинов.
+- Дополнительные наборы инструментов.
+
+Документация: "Tools" (https://abdurazaaqmohammed.github.io/mpmanager/tools.html)
+
+08. ИСКУССТВЕННЫЙ ИНТЕЛЛЕКТ И MCP — AI & MCP
+
+В проект интегрирован собственный MCP-сервер, позволяющий AI-инструментам взаимодействовать с внутренними механизмами приложения.
+
+Основные возможности:
+
+- Взаимодействие с файловым движком.
+- Управление ZIP-архивами.
+- Работа с APK-инструментами.
+- Выполнение поддерживаемых операций через MCP.
+- Контролируемый доступ к внутренним функциям.
+- Использование строгой политики разрешений.
+- Интеграция AI-инструментов с существующей архитектурой приложения.
+
+Документация: "AI and MCP" (https://abdurazaaqmohammed.github.io/mpmanager/ai-mcp.html)
+
+09. АРХИТЕКТУРА И ВНУТРЕННЯЯ СИСТЕМА
+
+MP Manager представляет собой интегрированную программную платформу, объединяющую файловые, сетевые, мультимедийные, системные и APK-инструменты.
+
+При развитии проекта необходимо:
+
+- Сохранять оригинальную архитектуру.
+- Обеспечивать совместимость существующих модулей.
+- Сохранять работоспособность внутренних движков.
+- Не нарушать существующие зависимости.
+- Предотвращать регрессии.
+- Обеспечивать корректную обработку ошибок.
+- Оптимизировать производительность и потребление памяти.
+- Сохранять совместимость с существующими файлами и настройками.
+- Проверять реальные функции, а не только визуальное отображение интерфейса.
+
+Документация разработчика:
+
+"ARCHITECTURE.md" (https://github.com/AbdurazaaqMohammed/MP-Manager/blob/main/docs/ARCHITECTURE.md)
+
+"THIRD_PARTY_PLUGINS.md" (https://github.com/AbdurazaaqMohammed/MP-Manager/blob/main/docs/THIRD_PARTY_PLUGINS.md)
+
+10. ПОДДЕРЖИВАЕМЫЕ ЯЗЫКИ
+
+В приложении предусмотрена поддержка нескольких языков:
+
+- Русский.
+- Упрощённый китайский.
+- Испанский.
+- Индонезийский.
+- Арабский.
+- Персидский.
+- Тайский.
+- Турецкий.
+- Вьетнамский.
+
+Проект открыт для улучшения существующих переводов и добавления новых языков.
+
+Особое внимание уделяется правильному отображению интерфейса, поддержке RTL и корректной локализации всех компонентов.
+
+11. СИСТЕМНЫЕ ТРЕБОВАНИЯ
+
+- Платформа: Android.
+- Минимальная версия: Android 6.0.
+- Поддержка локального хранилища.
+- Поддержка сетевых подключений.
+- Расширенные возможности при наличии Root, Shizuku или Dhizuku.
+- Совместимость с архитектурой оригинального проекта.
+
+12. ЗАГРУЗКА И ДОКУМЕНТАЦИЯ
+
+Последнюю официальную версию приложения можно получить в разделе GitHub Releases.
+
+Загрузка:
+
+https://github.com/AbdurazaaqMohammed/MP-Manager/releases
+
+Полная документация:
+
+https://abdurazaaqmohammed.github.io/mpmanager.html
+
+13. ТЕХНИЧЕСКАЯ ПОДДЕРЖКА И КОНТАКТЫ
+
+По вопросам разработки, технической поддержки, сотрудничества, предложений и сообщений об ошибках:
+
+Email: mwings740@gmail.com
+
+14. ЛИЦЕНЗИЯ И ОТКРЫТЫЙ ИСХОДНЫЙ КОД
+
+MP Manager распространяется на условиях GNU General Public License версии 3 (GPL v3).
+
+Все производные разработки должны соблюдать условия оригинальной лицензии, включая требования к распространению исходного кода и сохранению лицензионных уведомлений.
+
+Лицензия: GNU GPL v3.
+
+https://github.com/AbdurazaaqMohammed/MP-Manager/blob/main/LICENSE
+
+---
+
+<p align="center">MP MANAGER™
+
+OPEN SOURCE · ANDROID ENGINEERING · ADVANCED FILE MANAGEMENT · APK DEVELOPMENT · NATIVE TOOLS
+
+Единая платформа. Открытая архитектура. Профессиональные инструменты.
+
 </p>
-
-[![GitHub Release](https://img.shields.io/github/v/release/AbdurazaaqMohammed/MP-Manager?style=for-the-badge&logo=github&label=Download&color=purple)](https://github.com/AbdurazaaqMohammed/MP-Manager/releases)
-
-[![Telegram Discussion](https://img.shields.io/badge/Telegram%20Discussion-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/MP_Manager_Discussion)
-
-[![Donate](https://img.shields.io/badge/Donate-0079C1?style=for-the-badge&logo=paypal)](https://paypal.me/AbdurazaaqMohammed)
-
-MP Manager can browse and manage local, root and network storage in two panes and supports a variety of APK functions; signing, decompiling, DEX, resource editing, patching and dumping. Full documentation with screenshots is available on the [website](https://abdurazaaqmohammed.github.io/mpmanager.html).
-
-## Features
-
-| Area | Highlights | Docs |
-|---|---|---|
-| File Manager | Dual pane navigation, advanced search (including inside archives), archives browsed as folders (ZIP, RAR, zst, backups), recycle bin, checksums, root / Shizuku / Dhizuku access | [File Manager](https://abdurazaaqmohammed.github.io/mpmanager/file-manager.html) |
-| Network | FTP server and client with FTPS, WebDAV and SMB clients, server discovery, encrypted saved profiles | [Network](https://abdurazaaqmohammed.github.io/mpmanager/network.html) |
-| Media | Audio and video player with background mini player, image editor, EXIF editing, Free Style collage studio | [Media](https://abdurazaaqmohammed.github.io/mpmanager/media.html) |
-| APK Tools | Install and sign APKs, decompile and build, dex and ARSC editors, manifest quick edit, LSPatch integrated mode, IL2CPP dumper, Jiagu unpacker, native library patcher | [APK Tools](https://abdurazaaqmohammed.github.io/mpmanager/apk-tools.html) |
-| Editors | Text editor with syntax highlighting and AXML decoding, hex editor, compare text, archives, resources and dex files | [Editors](https://abdurazaaqmohammed.github.io/mpmanager/editors.html) |
-| Tools | Command Shell, Smart App Ops, SetEdit, SQLite viewer and editor, partition dumper, boot image tools, ELF inspector, Logcat reader, OCR, plugins and tool packs | [Tools](https://abdurazaaqmohammed.github.io/mpmanager/tools.html) |
-| AI and MCP | Built-in MCP server: let AI tools drive the app's file, ZIP and APK engines with a strict access policy | [AI and MCP](https://abdurazaaqmohammed.github.io/mpmanager/ai-mcp.html) |
-
-## Download
-
-Grab the latest APK from [Releases](https://github.com/AbdurazaaqMohammed/MP-Manager/releases). Minimum Android version is 6.0.
-
-## Contributing
-
-Pull requests are welcome. If you want to build on top of MP Manager, see the [third-party plugin API](docs/THIRD_PARTY_PLUGINS.md) and [ARCHITECTURE.md](docs/ARCHITECTURE.md) for how the codebase is organized.
-
-## Translations
-
-The app is translated to Russian, Simplified Chinese, Spanish, Indonesian, Arabic, Persian, Thai, Turkish and Vietnamese. New translations are welcome via pull request.
-
-## Why is AI used to develop MP Manager?
-
-I had the idea for MP Manager almost 10 years ago and I planned and developed it for years with little progress. I did not even post it on GitHub for a long time because the app barely worked at all. With AI, I was able to advance the app massively in a short time.
-
-While some people use arguments like "AI only helps unskilled people" as insults, I believe MP Manager is an example of how AI can be used by regular people to create working alternatives to paid/closed source software. Big corporations love AI because they can save huge money from it, but they **want you and me** to hate AI because it allows regular people to not only save money, but create our own alternatives catered to our needs.
-
-So far I didn't spend any money on AI in development of MP Manager. You can use AI to directly contribute to the development of MP Manager yourself.
-Some free AI services have referral program that can give me more free usage, you can help me by sign up for these programs with my referral code/link:
-  * [WorkBuddy](https://workbuddy.ai/invite?code=KGGFX6GZ) gives free monthly credits and limited free promotions with models like DeepSeek 4.1 Flash, GLM5.3 Flash, MiniMax M3.1 Flash and more available.
-    * You have to download the program and send at least one message (no charge) for me to get credits.
-  * [ZCode](https://zcode.z.ai/invite/CW3JK87H) offers GLM 5.3/Flash with regular free promotions like 500 million free tokens on weekends.
-    * You have to download the program and complete onboarding (no charge) for me to get credits.
-* If the app gets more pull requests it may become eligible for the free [Claude for Open Source](https://claude.com/contact-sales/claude-for-oss) program
-
-## License
-
-MP Manager is licensed under the [GNU GPL v3](LICENSE).
